@@ -1,0 +1,83 @@
+backend:
+  name: github
+  repo: DEIN-GITHUB-NAME/DEIN-REPO
+  branch: main
+  base_url: https://DEINE-DOMAIN-ODER-VERCEL-URL
+  auth_endpoint: /api/auth
+media_folder: assets/uploads
+public_folder: /assets/uploads
+collections:
+- name: cards
+  label: Cards
+  label_singular: Card
+  files:
+  - file: data/cards.json
+    label: Cards JSON
+    name: cardsjson
+    fields:
+    - label: Cards
+      name: cards
+      widget: list
+      summary: '{{fields.title}} ({{fields.tag}})'
+      fields:
+      - label: ID
+        name: id
+        widget: string
+      - label: Titel
+        name: title
+        widget: string
+      - label: Untertitel
+        name: subtitle
+        widget: string
+        required: false
+      - label: URL
+        name: url
+        widget: string
+      - label: Typ
+        name: type
+        widget: select
+        options:
+        - website
+        - presentation
+        default: website
+      - label: Fach/Tag
+        name: tag
+        widget: select
+        options:
+        - philosophie
+        - erdkunde
+        - geschichte
+        - physik
+        - kunst
+        - sowi
+        - deutsch
+        - sport
+        - mathe
+        - chemie
+        - informatik
+      - label: Bild (optional)
+        name: image_url
+        widget: image
+        required: false
+      - label: Status
+        name: status
+        widget: select
+        options:
+        - label: Fertig
+          value: fertig
+        - label: In Arbeit
+          value: in_arbeit
+        - label: Test
+          value: test
+        - label: Coming Soon
+          value: coming_soon
+        default: in_arbeit
+      - label: Sichtbar
+        name: is_published
+        widget: boolean
+        default: true
+      - label: Erstellt am
+        name: created_at
+        widget: datetime
+        format: YYYY-MM-DDTHH:mm:ssZ
+        required: false

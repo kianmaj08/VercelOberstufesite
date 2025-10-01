@@ -1,0 +1,85 @@
+{
+  "cards": [
+    {
+      "created_at": "",
+      "url": "https://philexikon.netlify.app/",
+      "status": "in_arbeit",
+      "subtitle": "Ein Lexikon für bekannte Philosophen.",
+      "title": "Philexikon",
+      "is_published": true,
+      "type": "website",
+      "tag": "philosophie",
+      "id": "Philexikon1244"
+    },
+    {
+      "type": "website",
+      "status": "in_arbeit",
+      "is_published": true,
+      "id": "Pieterbruegel",
+      "title": "Pieter Bruegel",
+      "subtitle": "Biografie, Kunstwerke und Hintergründe des Renaissance- Künstlers",
+      "url": "https://pieterbruegel.netlify.app/",
+      "tag": "kunst"
+    },
+    {
+      "type": "website",
+      "status": "in_arbeit",
+      "is_published": true,
+      "id": "Wienerkongress",
+      "title": "Wiener Kongress",
+      "subtitle": "Ein kurzer Überblick zum Wiener Kongress",
+      "url": "https://wienerkongress.netlify.app/",
+      "tag": "geschichte"
+    },
+    {
+      "type": "website",
+      "status": "fertig",
+      "is_published": true,
+      "id": "Closedai",
+      "title": "ClosedAi - ChatBBC",
+      "subtitle": "Eine Hochentwickelte Ai aus Azerbaidjan",
+      "url": "https://chatbbc.netlify.app/",
+      "tag": "informatik"
+    },
+    {
+      "type": "website",
+      "status": "in_arbeit",
+      "is_published": true,
+      "id": "Stochastosino",
+      "title": "Stochastosino Beta",
+      "subtitle": "Stochastik basierte Mathematik Spiele",
+      "url": "https://stochastosino.netlify.app/#",
+      "tag": "informatik"
+    },
+    {
+      "type": "website",
+      "status": "test",
+      "is_published": true,
+      "id": "aiworld",
+      "title": "Ai World ",
+      "subtitle": "(Claude Labs Test)",
+      "url": "https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/9acebe6b9610174b979cc5303462dd81/73790f78-a61c-451b-9a21-5cb77b830f76/index.html",
+      "tag": "informatik"
+    },
+    {
+      "type": "website",
+      "status": "in_arbeit",
+      "is_published": true,
+      "id": "physik23432",
+      "title": "Physik Q1",
+      "subtitle": "Alle Themen des Physik Gk´s in der Q1",
+      "url": "https://physikgk.netlify.app/",
+      "tag": "physik"
+    },
+    {
+      "type": "website",
+      "status": "test",
+      "is_published": true,
+      "id": "643",
+      "title": "NeueHomepageDesignTest1",
+      "subtitle": "test",
+      "url": "https://newoberstufe.netlify.app/",
+      "tag": "informatik"
+    }
+  ]
+}

@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>oberstufe.site</title>
+  <style>
+  :root{
+    --bg:#F3F5F9; --text:#0B1220; --muted:#4B5563; --primary:#2563EB; --primary-dark:#1D4ED8;
+    --yellow:#FDE68A; --lightblue:#93C5FD; --lightbrown:#D6B48C;
+    --physik:#374151; --erdkunde:#34D399; --sowi:#8B5CF6;
+    --card:#FFFFFF; --border:#E2E8F0; --shadow:0 8px 30px rgba(2,6,23,.08);
+    --radius:16px; --maxw:1100px;
+    --status-green:#10B981; --status-yellow:#F59E0B; --status-red:#EF4444;
+    --link:#2563EB; --link-strong:#1E40AF;
+  }
+  html[data-theme="dark"]{
+    --bg:#0B0E14; --text:#E6E6EB; --muted:#B1B6C2; --primary:#5B8CFF; --primary-dark:#3D6BFF;
+    --yellow:#F1D37E; --lightblue:#87B6FF; --lightbrown:#C1A074; --physik:#9CA3AF; --erdkunde:#34D399; --sowi:#A78BFA;
+    --card:#10141E; --border:#1E2636; --shadow:0 10px 30px rgba(0,0,0,.35); --link:#8AB3FF; --link-strong:#BFD1FF;
+  }
+  *{ box-sizing:border-box } 
+  body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial; background:var(--bg); color:var(--text); line-height:1.5 }
+  a{ color:inherit; text-decoration:none }
+  .container{ width:100%; max-width:var(--maxw); margin:0 auto; padding:0 20px }
+
+  header{ position:sticky; top:0; z-index:60; backdrop-filter:saturate(1.2) blur(6px); background:linear-gradient(135deg,#E8EEF8,#F3F5F9); border-bottom:1px solid var(--border) }
+  html[data-theme="dark"] header{ background:linear-gradient(135deg,#0E1424,#0B0E14) }
+  .header-inner{ display:flex; align-items:center; justify-content:space-between; height:60px }
+  .brand a{ font-weight:700; letter-spacing:.2px; white-space:nowrap }
+  .right{ display:flex; align-items:center; gap:16px }
+  .topnav{ display:flex; align-items:center; gap:14px }
+  .topnav a{ position:relative; padding:2px 4px; font-weight:600 }
+  .topnav a::after{ content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; background:transparent; transform:scaleX(0); transform-origin:left; transition:transform .25s ease, background .25s ease }
+  .topnav a.active::after{ background:var(--primary); transform:scaleX(1) }
+
+  .actions{ display:flex; align-items:center; gap:10px }
+  .menu-btn{ width:40px; height:40px; border-radius:12px; border:1px solid var(--border); background:var(--card); display:inline-flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:var(--shadow); position:relative }
+  .menu-dots{ font-size:20px; line-height:1 }
+  .dropdown{ position:absolute; top:72px; right:20px; background:var(--card); border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow); min-width:300px; display:none; overflow:hidden; z-index:70 }
+  .dropdown.open{ display:block }
+  .dropdown .row{ display:flex; align-items:center; justify-content:space-between; padding:10px 12px; border-bottom:1px dashed var(--border) }
+  .dropdown .row:last-child{ border-bottom:none }
+  .btn{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; border:1px solid var(--border); background:var(--card); cursor:pointer }
+  .btn.primary{ border-color:#93C5FD; background:#EFF6FF; color:#1E3A8A; font-weight:700 }
+
+  .switch{ position:relative; width:52px; height:28px; background:#E5E7EB; border:1px solid var(--border); border-radius:999px; cursor:pointer }
+  .switch .knob{ position:absolute; top:2px; left:2px; width:24px; height:24px; background:#fff; border-radius:50%; box-shadow:var(--shadow); transition:left .2s ease }
+  .switch.on{ background:#C7D2FE } .switch.on .knob{ left:26px }
+
+  .hero{ padding:36px 0 24px; text-align:center }
+  .hero h1{ margin:0 0 6px 0; font-size:clamp(1.9rem,4.2vw,2.6rem) }
+  .hero p{ margin:0; color:var(--muted) }
+
+  .search-wrap{ display:flex; justify-content:center; margin-top:12px }
+  .search{ width:min(680px,92vw); display:flex; align-items:center; gap:8px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:10px 12px; box-shadow:var(--shadow) }
+  .search input{ width:100%; border:none; outline:none; background:transparent; color:var(--text); font-size:1rem }
+  .search .hint{ color:var(--muted); font-size:.9rem }
+
+  .section{ padding:22px 0 }
+  .grid{ display:grid; grid-template-columns:repeat(12,1fr); gap:16px }
+  .card{ position:relative; grid-column:span 12; background:var(--card); border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow); padding:18px; min-height:180px; display:flex; flex-direction:column; gap:10px; transition:transform .15s ease, box-shadow .2s ease, border-color .2s ease; overflow:hidden }
+  .card::before{ content:""; position:absolute; left:0; top:0; right:0; height:6px; background:var(--yellow); border-top-left-radius:16px; border-top-right-radius:16px }
+  .card--blue::before{ background:var(--lightblue) } .card--brown::before{ background:var(--lightbrown) }
+  .card--physik::before{ background:var(--physik) } .card--erdkunde::before{ background:var(--erdkunde) } .card--sowi::before{ background:var(--sowi) } .card--philosophie::before{ background:var(--yellow) } .card--geschichte::before{ background:var(--lightbrown) }
+  .card h3{ margin:0; font-size:1.12rem } .card p{ margin:0; color:var(--muted) }
+  .project-note{ font-size:.9rem; color:#6B7280 }
+  @media (min-width:680px){ .card{ grid-column:span 6 } }
+
+  .tags{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px }
+  .tag{ font-size:.8rem; border-radius:999px; padding:2px 8px; border:1px solid var(--border) }
+  .tag.philosophie{ background:var(--yellow) } .tag.kunst{ background:var(--lightblue) } .tag.geschichte{ background:var(--lightbrown) }
+  .tag.physik{ background:var(--physik); color:#fff } .tag.erdkunde{ background:var(--erdkunde) } .tag.sowi{ background:var(--sowi); color:#fff }
+
+  .status{ position:absolute; right:12px; bottom:12px; font-size:.78rem; font-weight:700; color:#fff; padding:4px 8px; border-radius:999px; box-shadow:0 2px 8px rgba(0,0,0,.15) }
+  .status.green{ background:var(--status-green) } .status.yellow{ background:var(--status-yellow) } .status.red{ background:var(--status-red) }
+
+  .ghost{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; background:#EFF6FF; color:#1E3A8A; border:1px solid #DBEAFE; font-weight:600; transition:background-color .2s ease, transform .15s ease }
+  .ghost:hover{ background:#DBEAFE; transform:translateY(-1px) }
+
+  .info,.improvements{ background:#F9FAFB; border:1px solid var(--border); border-left:4px solid var(--primary); border-radius:16px; box-shadow:var(--shadow); padding:clamp(18px,3vw,24px); margin-top:18px }
+  html[data-theme="dark"] .info,html[data-theme="dark"] .improvements{ background:#0F141E }
+  .info h3,.improvements h3{ margin:0 0 10px 0; font-size:1.22rem; color:var(--primary) }
+  .info a.link{ color:var(--link); font-weight:600 } .info a.link:hover{ text-decoration:underline } .info a.mail{ color:var(--link-strong); font-weight:700 }
+
+  .faq{ margin-top:18px } .faq h3{ margin:0 0 10px 0; font-size:1.22rem; color:var(--primary) }
+  .faq-item{ background:#FFF; border:1px solid var(--border); border-radius:12px; padding:14px; margin:10px 0; box-shadow:var(--shadow) }
+  html[data-theme="dark"] .faq-item{ background:#0F141E }
+  .kw-philosophie{ color:#8a6c00 } .kw-kunst{ color:#1E40AF } .kw-geschichte{ color:#5B3A1E }
+
+  footer{ position:relative; padding:48px 0 56px; color:var(--muted); border-top:1px solid var(--border); margin-top:20px }
+  .footer-inner{ position:relative; text-align:center }
+  .cta-button{ display:inline-block; padding:12px 18px; border-radius:999px; border:2px solid #93C5FD; background:#EFF6FF; font-weight:800; box-shadow:0 8px 24px rgba(147,197,253,.35); color:#6D28D9 }
+  .cta-button:hover{ transform:translateY(-1px) }
+  .footer-meta{ margin-top:10px }
+  .qr-in-footer{ position:absolute; left:20px; bottom:-22px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:6px; box-shadow:var(--shadow); display:flex; align-items:center; gap:10px }
+  .qr-in-footer img{ display:block; width:120px; height:auto }
+  .share-label{ font-weight:700; color:var(--muted); display:flex; align-items:center; gap:8px }
+  .share-label svg{ width:20px; height:20px }
+
+  /* v2.21 to-top blue */
+.to-top{ position:fixed; right:18px; bottom:18px; display:none; width:46px; height:46px; border-radius:999px; border:2px solid #fff; background:transparent; box-shadow:0 10px 24px rgba(2,6,23,.25);  align-items:center; justify-content:center; transition:transform .15s ease, box-shadow .2s ease }
+.to-top:hover{ transform:translateY(-3px); box-shadow:0 14px 28px rgba(2,6,23,.35) }
+.to-top svg{ width:20px; height:20px; stroke:#fff; fill:none; stroke-width:2 }
+  .to-top.show{ display:flex } .feedback-btn{ position:fixed; right:68px; bottom:18px; display:none; align-items:center; justify-content:center; padding:10px 14px; border-radius:999px; border:1px solid #DBEAFE; background:#EFF6FF; box-shadow:var(--shadow); font-weight:700; color:#1E3A8A; z-index:65 }
+  .feedback-btn.show{ display:inline-flex } .feedback-btn:hover{ transform:translateY(-2px); border-color:#93C5FD }
+
+  @media (max-width:640px){ .qr-in-footer{ display:none } }
+
+  /* Subject nav (PP) */
+  .subject-nav{ position:sticky; top:60px; z-index:50; background:linear-gradient(135deg,#E8EEF8,#F3F5F9); border-bottom:1px solid var(--border) }
+  html[data-theme="dark"] .subject-nav{ background:linear-gradient(135deg,#0E1424,#0B0E14) }
+  .subject-inner{ display:flex; gap:10px; overflow:auto; padding:10px 20px }
+  .chip{ white-space:nowrap; padding:8px 14px; border-radius:999px; border:1px solid var(--border); display:inline-flex; align-items:center; gap:8px; box-shadow:0 1px 0 rgba(0,0,0,.03) }
+  .chip .tag{ margin:0 }
+  .chip.active{ outline:2px solid #93C5FD }
+
+  .subject{ scroll-margin-top:96px; padding-top:14px }
+  .subject h2{ margin:0 0 4px 0; font-size:1.3rem }
+  .subject .sub{ color:var(--muted); margin:0 0 10px 0 }
+
+  
+  .menu-icon{ position:relative; width:20px; height:14px }
+  .menu-icon .bar{ position:absolute; left:0; right:0; height:2.5px; background:var(--text); border-radius:2px; transition:transform .2s ease, opacity .2s ease, top .2s ease, bottom .2s ease }
+  .menu-icon .bar:nth-child(1){ top:0 }
+  .menu-icon .bar:nth-child(2){ top:50%; transform:translateY(-50%) }
+  .menu-icon .bar:nth-child(3){ bottom:0 }
+  .menu-btn.open .menu-icon .bar:nth-child(1){ top:50%; transform:translateY(-50%) rotate(45deg) }
+  .menu-btn.open .menu-icon .bar:nth-child(2){ opacity:0 }
+  .menu-btn.open .menu-icon .bar:nth-child(3){ bottom:auto; top:50%; transform:translateY(-50%) rotate(-45deg) }
+  .menu-btn:hover{ box-shadow:0 8px 18px rgba(2,6,23,.12) }
+
+  /* Header layout */
+/* v2.17 header right align */
+  header{ position:sticky; top:0; z-index:40; background:linear-gradient(180deg, rgba(99,102,241,.06), rgba(99,102,241,0)); border-bottom:1px solid var(--border) }
+  header .wrap{ max-width:var(--maxw); margin:0 auto; padding:10px 18px; display:flex; align-items:center; gap:16px }
+  header .left{ flex:0 0 auto }
+  header .brand{ font-weight:800; font-size:18px; text-decoration:none; color:var(--text) }
+  header .nav{ display:flex; gap:28px; align-items:center; margin-left:auto; margin-right:6px }
+  header .nav a{ font-weight:700; text-decoration:none; color:var(--text); padding:8px 2px; border-bottom:2px solid transparent }
+  header .nav a.active{ border-bottom-color: var(--primary) }
+  header .right{ flex:0 0 auto; display:flex; align-items:center; gap:8px }
+/* v2.16 header tune */
+  header{ position:sticky; top:0; z-index:40; background:linear-gradient(180deg, rgba(99,102,241,.06), rgba(99,102,241,0)); border-bottom:1px solid var(--border) }
+  header .wrap{ max-width:var(--maxw); margin:0 auto; padding:10px 18px; display:flex; align-items:center; gap:16px }
+  header .brand{ font-weight:800; font-size:18px; letter-spacing:.1px; text-decoration:none; color:var(--text) }
+  header .nav{ display:flex; gap:28px; align-items:center; margin-left:auto; margin-right:6px }
+  header .nav a{ font-weight:700; text-decoration:none; color:var(--text); padding:8px 2px; border-bottom:2px solid transparent }
+  header .nav a.active{ border-bottom-color: var(--primary) }
+  header .right{ display:flex; align-items:center; gap:8px }
+  .menu-btn{ width:40px; height:40px; border-radius:12px; border:1px solid var(--border); background:var(--card); display:inline-flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:var(--shadow); position:relative }
+  header{ position:sticky; top:0; z-index:40; background:linear-gradient(180deg, rgba(99,102,241,.06), rgba(99,102,241,0)); border-bottom:1px solid var(--border) }
+  header .wrap{ max-width:var(--maxw); margin:0 auto; padding:10px 18px; display:flex; align-items:center; gap:16px }
+  header .left{ flex:0 0 auto }
+  header .brand{ font-weight:800; text-decoration:none; color:var(--text) }
+  header .nav{ display:flex; gap:28px; align-items:center; margin-left:auto; margin-right:6px }
+  header .nav a{ text-decoration:none; color:var(--text); padding:6px 4px; border-bottom:2px solid transparent }
+  header .nav a.active{ border-bottom-color: var(--primary) }
+  header .right{ flex:0 0 auto; display:flex; align-items:center; gap:8px }
+  .menu-btn{ width:40px; height:40px; border-radius:12px; border:1px solid var(--border); background:var(--card); display:inline-flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:var(--shadow); position:relative }
+  /* Hamburger to X animation */
+  .menu-icon{ position:relative; width:20px; height:14px }
+  .menu-icon .bar{ position:absolute; left:0; right:0; height:2.5px; background:var(--text); border-radius:2px; transition:transform .2s ease, opacity .2s ease, top .2s ease, bottom .2s ease }
+  .menu-icon .bar:nth-child(1){ top:0 }
+  .menu-icon .bar:nth-child(2){ top:50%; transform:translateY(-50%) }
+  .menu-icon .bar:nth-child(3){ bottom:0 }
+  .menu-btn.open .menu-icon .bar:nth-child(1){ top:50%; transform:translateY(-50%) rotate(45deg) }
+  .menu-btn.open .menu-icon .bar:nth-child(2){ opacity:0 }
+  .menu-btn.open .menu-icon .bar:nth-child(3){ bottom:auto; top:50%; transform:translateY(-50%) rotate(-45deg) }
+
+  /* Dropdown polish */
+  .dropdown{ position:absolute; right:16px; top:60px; background:var(--card); border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow); padding:10px; display:none }
+  .dropdown.open{ display:block }
+  .dropdown .row{ margin:6px 0 }
+  .dropdown .btn{ width:100%; border:1.5px solid var(--primary); background:#fff }
+  html[data-theme="dark"] .dropdown .btn{ background:#111827 }
+  /* Settings overlay */
+  .overlay-backdrop{ position:fixed; inset:0; background:rgba(2,6,23,.45); backdrop-filter:blur(2px); display:none; z-index:90 }
+  .modal{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); width:min(720px,94vw); max-height:80vh; overflow:auto; background:var(--card); border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow); display:none; z-index:91 }
+  .modal-header{ padding:18px 18px 8px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center }
+  .modal-body{ padding:14px 18px }
+  .btn.linklike{ background:transparent; border:none; color:var(--link); font-weight:700; cursor:pointer }
+  .row-setting{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 0; border-bottom:1px dashed var(--border) }
+  .row-setting:last-child{ border-bottom:none }
+  .icon-toggle{ display:flex; gap:8px }
+  .icon-btn{ width:40px; height:32px; display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--border); background:var(--card); border-radius:10px; cursor:pointer }
+  .icon-btn.active{ background:#EFF6FF; border-color:#93C5FD }
+  .icon-btn svg{ width:18px; height:18px; stroke:currentColor }
+  /* Add-website: 3 cards in row, plain + soft */
+  .card--plain::before{ display:none }
+  .card--soft{ box-shadow:0 10px 30px rgba(147,197,253,.28) }
+  .grid.three .card{ grid-column:span 12 }
+  @media (min-width:680px){ .grid.three .card{ grid-column:span 6 } }
+  @media (min-width:980px){ .grid.three .card{ grid-column:span 4 } }
+html[data-theme="dark"] .to-top{ background:rgba(255,255,255,.18); box-shadow:0 10px 24px rgba(0,0,0,.45) }
+/* v2.20 legend spacing */
+.modal .legend-tags, .modal .legend-status{
+  display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+}
+.modal .legend-status .status{ margin-right:0 } /* gap handles spacing */
+/* v2.21 legend list */
+.modal .legend-list{ list-style:none; padding:0; margin:10px 0 0 0 }
+.modal .legend-list li{ display:flex; align-items:center; gap:10px; margin:6px 0 }
+.modal .legend-list .status{ flex:0 0 auto }
+/* v2.23 legend recode */
+.modal .status-list{ list-style:none; padding:0; margin:12px 0 0 0; display:grid; grid-template-columns:1fr; gap:10px }
+.modal .status-item{ display:grid; grid-template-columns:auto 1fr; column-gap:10px; row-gap:2px; align-items:center }
+.modal .status-item .status{ grid-column:1; grid-row:1 / span 2 }
+.modal .status-item .name{ grid-column:2; grid-row:1; font-weight:600 }
+.modal .status-item .desc{ grid-column:2; grid-row:2; color:var(--muted) }
+
+/* removed old Variant A */
+.chip{
+  background:#FFFFFF;
+  border:2px solid var(--chip-color, var(--border));
+  border-radius:999px;
+  padding:8px 16px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  box-shadow:0 1px 0 rgba(2,6,23,.03);
+  transition:transform .15s ease, box-shadow .2s ease, border-color .2s ease, background-color .2s ease;
+}
+.chip .tag{
+  /* neutralize old tag pill look inside chip */
+  background:transparent !important;
+  border:none !important;
+  padding:0 !important;
+  margin:0;
+  font-weight:600;
+  color:inherit;
+}
+/* Hover: soft lift + subtle shadow */
+.chip:hover{ transform:translateY(-2px); box-shadow:0 8px 18px rgba(2,6,23,.12) }
+/* Active: light lilac fill + stronger outline */
+.chip.active{ background:#EEF2FF; border-width:3px }
+/* Dark mode tweaks */
+html[data-theme="dark"] .chip{ background:#0F141E }
+html[data-theme="dark"] .chip.active{ background:rgba(139,92,246,.15) }
+
+/* Color mapping via --chip-color set by inner .tag subject */
+.chip .tag.philosophie{ --chip-color:#FACC15 }  /* gelb */
+.chip .tag.erdkunde{ --chip-color:#10B981 }    /* grün */
+.chip .tag.geschichte{ --chip-color:#D6B48C }  /* braun/hellbraun wie vorher */
+.chip .tag.physik{ --chip-color:#374151 }      /* dunkelgrau */
+.chip .tag.sowi{ --chip-color:#8B5CF6 }        /* violett */
+
+/* Neue Farben */
+.chip .tag.deutsch{ --chip-color:#EF4444 }     /* rot */
+.chip .tag.sport{ --chip-color:#14B8A6 }       /* türkis */
+.chip .tag.mathe{ --chip-color:#F97316 }       /* orange */
+.chip .tag.chemie{ --chip-color:#84CC16 }      /* hellgrün */
+.chip .tag.informatik{ --chip-color:#4F46E5 }  /* indigo */
+
+/* v2.29 Colored Chips Fix */
+.chip {
+  border:2px solid var(--chip-color, var(--border));
+  background: var(--chip-bg, #FFFFFF);
+  color: var(--chip-text, inherit);
+  border-radius:999px;
+  padding:8px 16px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  box-shadow:0 1px 0 rgba(2,6,23,.03);
+  transition:transform .15s ease, box-shadow .2s ease, border-color .2s ease, background-color .2s ease;
+}
+.chip .tag{ background:transparent !important; border:none !important; padding:0 !important; margin:0; font-weight:600; color:inherit; }
+.chip:hover{ transform:translateY(-2px); box-shadow:0 8px 18px rgba(2,6,23,.12) }
+.chip.active{ outline:2px solid rgba(147,197,253,.65) }
+
+.chip .tag.philosophie{ --chip-color:#FACC15; --chip-bg:#FEF9C3 }
+.chip .tag.erdkunde{    --chip-color:#10B981; --chip-bg:#D1FAE5 }
+.chip .tag.geschichte{  --chip-color:#D6B48C; --chip-bg:#F5EBDD }
+.chip .tag.physik{      --chip-color:#374151; --chip-bg:#E5E7EB }
+.chip .tag.sowi{        --chip-color:#8B5CF6; --chip-bg:#EDE9FE }
+.chip .tag.deutsch{     --chip-color:#EF4444; --chip-bg:#FEE2E2 }
+.chip .tag.sport{       --chip-color:#14B8A6; --chip-bg:#CCFBF1 }
+.chip .tag.mathe{       --chip-color:#F97316; --chip-bg:#FFEDD5 }
+.chip .tag.chemie{      --chip-color:#84CC16; --chip-bg:#ECFCCB }
+.chip .tag.informatik{  --chip-color:#4F46E5; --chip-bg:#E0E7FF }
+
+html[data-theme="dark"] .chip{ background: rgba(255,255,255,.04) }
+html[data-theme="dark"] .chip .tag.philosophie{ --chip-bg: rgba(250,204,21,.18) }
+html[data-theme="dark"] .chip .tag.erdkunde{    --chip-bg: rgba(16,185,129,.18) }
+html[data-theme="dark"] .chip .tag.geschichte{  --chip-bg: rgba(214,180,140,.18) }
+html[data-theme="dark"] .chip .tag.physik{      --chip-bg: rgba(55,65,81,.25) }
+html[data-theme="dark"] .chip .tag.sowi{        --chip-bg: rgba(139,92,246,.20) }
+html[data-theme="dark"] .chip .tag.deutsch{     --chip-bg: rgba(239,68,68,.20) }
+html[data-theme="dark"] .chip .tag.sport{       --chip-bg: rgba(20,184,166,.20) }
+html[data-theme="dark"] .chip .tag.mathe{       --chip-bg: rgba(249,115,22,.20) }
+html[data-theme="dark"] .chip .tag.chemie{      --chip-bg: rgba(132,204,22,.20) }
+html[data-theme="dark"] .chip .tag.informatik{  --chip-bg: rgba(79,70,229,.20) }
+
+/* === v2.30 Subject Chips: Variante A mit Farben === */
+.chip {
+  border:2px solid var(--chip-color, var(--border));
+  background: var(--chip-bg,#fff);
+  color: var(--chip-text, inherit);
+  border-radius:999px;
+  padding:8px 16px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  transition:transform .15s ease, box-shadow .2s ease, border-color .2s ease, background-color .2s ease;
+}
+.chip .tag{ background:transparent !important; border:none !important; padding:0 !important; margin:0; font-weight:600; color:inherit; }
+.chip:hover{ transform:translateY(-2px); box-shadow:0 8px 18px rgba(2,6,23,.12) }
+.chip.active{ background:#EEF2FF; outline:2px solid rgba(147,197,253,.65) }
+
+/* Farbzuordnung pro Fach */
+.chip:has(.tag.philosophie){ --chip-color:#FACC15; --chip-bg:#FEF9C3 }
+.chip:has(.tag.erdkunde){    --chip-color:#10B981; --chip-bg:#D1FAE5 }
+.chip:has(.tag.geschichte){  --chip-color:#D6B48C; --chip-bg:#F5EBDD }
+.chip:has(.tag.physik){      --chip-color:#374151; --chip-bg:#E5E7EB }
+.chip:has(.tag.sowi){        --chip-color:#8B5CF6; --chip-bg:#EDE9FE }
+.chip:has(.tag.deutsch){     --chip-color:#EF4444; --chip-bg:#FEE2E2 }
+.chip:has(.tag.sport){       --chip-color:#14B8A6; --chip-bg:#CCFBF1 }
+.chip:has(.tag.mathe){       --chip-color:#F97316; --chip-bg:#FFEDD5 }
+.chip:has(.tag.chemie){      --chip-color:#84CC16; --chip-bg:#ECFCCB }
+.chip:has(.tag.informatik){  --chip-color:#4F46E5; --chip-bg:#E0E7FF }
+
+/* Dark Mode */
+html[data-theme="dark"] .chip{ background: rgba(255,255,255,.04) }
+html[data-theme="dark"] .chip.active{ background: rgba(139,92,246,.15) }
+</style>
+<style>
+</style>
+
+<style>
+/* v2.31 Chips order/specificity fix */
+.subject-nav .chip{
+  background:#FFFFFF !important;
+  border:2px solid var(--chip-color, var(--border)) !important;
+  color:var(--text) !important;
+}
+.subject-nav .chip.active{
+  background:#EEF2FF !important;
+  border-width:3px !important;
+  outline:2px solid rgba(147,197,253,.65) !important;
+}
+/* Color mapping (chip--{fach}) */
+.subject-nav .chip--philosophie{ --chip-color:#FACC15 }
+.subject-nav .chip--erdkunde{    --chip-color:#10B981 }
+.subject-nav .chip--geschichte{  --chip-color:#D6B48C }
+.subject-nav .chip--physik{      --chip-color:#374151 }
+.subject-nav .chip--sowi{        --chip-color:#8B5CF6 }
+.subject-nav .chip--deutsch{     --chip-color:#EF4444 }
+.subject-nav .chip--sport{       --chip-color:#14B8A6 }
+.subject-nav .chip--mathe{       --chip-color:#F97316 }
+.subject-nav .chip--chemie{      --chip-color:#84CC16 }
+.subject-nav .chip--informatik{  --chip-color:#4F46E5 }
+</style>
+
+<style>
+/* === Dark Mode refinements (v2.32) === */
+html[data-theme="dark"]{
+  --bg:#0B0E14;
+  --card:#0F141E;
+  --text:#E6E6EB;
+  --muted:#B1B6C2;
+  --border:#1E2636;
+  --primary:#8AB3FF;
+  --primary-dark:#5B8CFF;
+  --shadow:0 10px 28px rgba(0,0,0,.45);
+  --link:#8AB3FF;
+  --link-strong:#BFD1FF;
+}
+/* Header / Nav */
+html[data-theme="dark"] header{
+  background:linear-gradient(180deg, rgba(16,22,36,.92), rgba(11,14,20,.70));
+  border-bottom:1px solid var(--border);
+}
+html[data-theme="dark"] .menu-btn{ background:#121826; border:1px solid var(--border) }
+/* Inputs / Search */
+html[data-theme="dark"] input[type="text"],
+html[data-theme="dark"] input[type="search"],
+html[data-theme="dark"] .search-bar,
+html[data-theme="dark"] .search{
+  background:#0F141E;
+  border:1px solid var(--border);
+  color:var(--text);
+}
+html[data-theme="dark"] ::placeholder{ color:#9AA3B2 }
+/* Cards */
+html[data-theme="dark"] .card{ background:var(--card); border-color:var(--border); box-shadow:0 10px 30px rgba(0,0,0,.35) }
+/* Buttons */
+html[data-theme="dark"] .btn{ background:#121826; border:1px solid var(--border); color:var(--text) }
+html[data-theme="dark"] .btn.primary{ background:var(--primary); color:#0B0E14; border:0 }
+/* Modals */
+html[data-theme="dark"] .modal{ background:var(--card); border:1px solid var(--border); color:var(--text) }
+/* Footer QR-Block */
+html[data-theme="dark"] .qr-in-footer{ background:#0F141E; border:1px solid var(--border) }
+/* Chips (Variante A) */
+html[data-theme="dark"] .subject-nav .chip{
+  background:#0F141E !important;
+  border-color:var(--chip-color,var(--border)) !important;
+  color:var(--text) !important;
+  box-shadow:0 1px 0 rgba(0,0,0,.4);
+}
+html[data-theme="dark"] .subject-nav .chip.active{ background:rgba(139,92,246,.15) !important }
+/* Scroll-to-top & Feedback */
+html[data-theme="dark"] #scrollUpBtn,
+html[data-theme="dark"] .to-top{ background:#1F2937; color:#fff }
+html[data-theme="dark"] .feedback-btn{ background:#0F141E; border:1px solid var(--border); color:var(--link-strong) }
+</style>
+<style>
+/* === Dark Mode: deep navy + beige accents (v2.33) === */
+html[data-theme="dark"]{
+  /* Deep navy (nicht schwarz) */
+  --bg:#0E121A;
+  --card:#121826;
+  --text:#E9E9EE;
+  --muted:#B5BBC9;
+  --border:#1E2636;
+  --shadow:0 10px 28px rgba(0,0,0,.42);
+
+  /* Beige Akzente */
+  --accent:#E6D5B8;          /* Hauptbeige */
+  --accent-strong:#D9C29A;   /* stärker für Linien/Outlines */
+  --accent-soft:rgba(230,213,184,.25); /* zarte Fills */
+
+  /* Links/Primary in Dark neutralisiert in Richtung Beige */
+  --primary:var(--accent);
+  --primary-dark:#CDAF85;
+  --link:var(--accent);
+  --link-strong:#F0E4CD;
+}
+
+/* Header / Nav */
+html[data-theme="dark"] header{
+  background:linear-gradient(180deg, rgba(18,24,38,.95), rgba(14,18,26,.78));
+  border-bottom:1px solid var(--border);
+}
+html[data-theme="dark"] header .nav a.active{
+  border-bottom-color: var(--accent-strong);
+}
+
+/* Infoboxen / Cards mit zartem beige Akzent */
+html[data-theme="dark"] .card{ background:var(--card); border-color:var(--border); box-shadow:0 10px 28px rgba(0,0,0,.38) }
+html[data-theme="dark"] .card--blue::before,
+html[data-theme="dark"] .card--brown::before,
+html[data-theme="dark"] .card--physik::before,
+html[data-theme="dark"] .card--erdkunde::before,
+html[data-theme="dark"] .card--geschichte::before{
+  background: var(--accent-strong) !important;
+  opacity:.9;
+}
+
+/* Buttons */
+html[data-theme="dark"] .btn{ background:#141B2A; border:1px solid var(--border); color:var(--text) }
+html[data-theme="dark"] .btn.primary{ background:var(--accent); color:#0E121A; border:0 }
+html[data-theme="dark"] .cta-button{ background:var(--accent); color:#0E121A; border:0 }
+
+/* Suche / Inputs */
+html[data-theme="dark"] input[type="text"],
+html[data-theme="dark"] input[type="search"],
+html[data-theme="dark"] .search-bar,
+html[data-theme="dark"] .search{
+  background:#121826;
+  border:1px solid var(--border);
+  color:var(--text);
+}
+html[data-theme="dark"] ::placeholder{ color:#9FA8BA }
+
+/* Modals */
+html[data-theme="dark"] .modal{ background:var(--card); border:1px solid var(--border); color:var(--text) }
+html[data-theme="dark"] .modal .modal-header{ border-bottom:1px solid var(--border) }
+
+/* Chips (Variante A) – Outline in Beige nur für neutrale Bereiche; Fachfarben bleiben */
+html[data-theme="dark"] .subject-nav .chip{
+  background:#121826 !important;
+  color:var(--text) !important;
+  box-shadow:0 1px 0 rgba(0,0,0,.38);
+}
+html[data-theme="dark"] .subject-nav .chip.active{ background:var(--accent-soft) !important; outline:2px solid var(--accent-strong) !important }
+html[data-theme="dark"] .subject-nav .chip:hover{ box-shadow:0 10px 22px rgba(0,0,0,.32) }
+
+/* Footer QR-Block */
+html[data-theme="dark"] .qr-in-footer{ background:#121826; border:1px solid var(--border) }
+
+/* Scroll-to-top & Feedback */
+html[data-theme="dark"] .to-top{ background:#1C2436; color:#fff }
+html[data-theme="dark"] .feedback-btn{ background:#121826; border:1px solid var(--border); color:var(--link-strong) }
+</style>
+<style>
+/* === Dark Mode Palette (v2.34) === */
+html[data-theme="dark"] {
+  --bg: #222831;
+  --card: #393E46;
+  --text: #F5F5F5;
+  --muted: #948979;
+  --border: #948979;
+  --accent: #DFD0B8;
+  --accent-strong: #DFD0B8;
+  --accent-soft: rgba(223,208,184,.15);
+  --primary: #DFD0B8;
+  --primary-dark: #948979;
+  --link: #DFD0B8;
+  --link-strong: #FFF5E1;
+}
+
+/* Backgrounds */
+html[data-theme="dark"] body { background: var(--bg); color: var(--text); }
+html[data-theme="dark"] header { background: var(--card); border-bottom: 1px solid var(--border); }
+html[data-theme="dark"] footer { background: var(--card); border-top: 1px solid var(--border); }
+
+/* Cards / Info-Boxen */
+html[data-theme="dark"] .card { background: var(--card); border: 1px solid var(--border); color: var(--text); }
+html[data-theme="dark"] .info-box { background: var(--card); border-left: 4px solid var(--accent-strong); }
+
+/* Inputs / Search */
+html[data-theme="dark"] input[type="text"],
+html[data-theme="dark"] input[type="search"],
+html[data-theme="dark"] .search-bar,
+html[data-theme="dark"] .search {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+html[data-theme="dark"] ::placeholder { color: var(--muted); }
+
+/* Buttons */
+html[data-theme="dark"] .btn { background: var(--card); border: 1px solid var(--border); color: var(--text); }
+html[data-theme="dark"] .btn.primary { background: var(--accent); color: #222831; border: 0; }
+html[data-theme="dark"] .cta-button { background: var(--accent); color: #222831; border: 0; }
+
+/* Chips (Variante A) */
+html[data-theme="dark"] .subject-nav .chip {
+  background: var(--card) !important;
+  border-color: var(--chip-color,var(--border)) !important;
+  color: var(--text) !important;
+  box-shadow: 0 1px 0 rgba(0,0,0,.3);
+}
+html[data-theme="dark"] .subject-nav .chip.active {
+  background: var(--accent-soft) !important;
+  outline: 2px solid var(--accent-strong) !important;
+}
+html[data-theme="dark"] .subject-nav .chip:hover { box-shadow: 0 8px 18px rgba(0,0,0,.35); }
+
+/* Scroll-to-top & Feedback */
+html[data-theme="dark"] .to-top { background: var(--card); color: var(--text); border: 1px solid var(--border); }
+html[data-theme="dark"] .feedback-btn { background: var(--card); border: 1px solid var(--border); color: var(--link-strong); }
+</style>
+<style>
+/* v2.35 Dark Mode: Haupttitel in Anthrazit */
+html[data-theme="dark"] h1.site-title {
+  color: #393E46;
+  font-weight: 700;
+  text-shadow: 0 1px 4px rgba(0,0,0,.7);
+}
+</style>
+<style>
+/* v2.39 Changelog styling */
+.changelog-list { list-style:none; margin:0; padding:0; }
+.changelog-list li { margin:4px 0; }
+.changelog-list .version { font-weight:600; }
+.changelog-list .date { color:#9ca3af; }
+.changelog-list li.feature { color:#22c55e; } /* Grün */
+.changelog-list li.bugfix  { color:#6b7280; } /* Grau */
+.changelog-list li.design  { color:#3b82f6; } /* Blau */
+</style>
+<style>
+/* v2.41a: Dark title fix + changelog styles + feedback links */
+html[data-theme="dark"] h1.site-title,
+html[data-theme="dark"] .title-anthrazit { color:#393E46 !important; }
+
+/* Changelog ULs unified look & colors */
+#modalChangelog ul { list-style:none; margin:0; padding:0; }
+#modalChangelog li { margin:4px 0; color:#6b7280; } /* default grey */
+#modalChangelog li .version { font-weight:600; }
+#modalChangelog li .date { color:#9ca3af; }
+#modalChangelog li.feature { color:#22c55e; }  /* Grün */
+#modalChangelog li.design  { color:#3b82f6; }  /* Blau */
+#modalChangelog li.bugfix  { color:#6b7280; }  /* Grau */
+
+/* Feedback card links in blue */
+.feedback-card a { color:#3b82f6 !important; font-weight:600; }
+html[data-theme="dark"] .feedback-card a { color:#60a5fa !important; }
+</style>
+<style>
+/* v2.42 Changelog color coding */
+#modalChangelog .changelog-list { list-style:none; margin:0; padding:0; }
+#modalChangelog .changelog-list li { margin:4px 0; }
+#modalChangelog .changelog-list .version { font-weight:600; }
+#modalChangelog .changelog-list .date { color:#9ca3af; }
+#modalChangelog .changelog-list li.feature { color:#22c55e; }  /* Grün */
+#modalChangelog .changelog-list li.bugfix  { color:#6b7280; }  /* Grau */
+#modalChangelog .changelog-list li.design  { color:#3b82f6; }  /* Blau */
+</style>
+
+<style>
+.card-grid.two-cols{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px }
+@media (max-width: 640px){ .card-grid.two-cols{ grid-template-columns:1fr } }
+.card-grid{ grid-auto-flow: row dense; }
+
+:root{
+  --tag-philosophie:#FACC15;
+  --tag-erdkunde:#22C55E;
+  --tag-geschichte:#8B5E3C;
+  --tag-physik:#374151;
+  --tag-kunst:#60A5FA;
+  --tag-sowi:#7C3AED;
+  --tag-deutsch:#EF4444;
+  --tag-sport:#14B8A6;
+  --tag-mathe:#F97316;
+  --tag-chemie:#84CC16;
+  --tag-informatik:#4F46E5;
+}
+
+.card{ position:relative; border-radius:16px; padding:16px; background:#fff; border:1px solid #e5e7eb; box-shadow:0 6px 18px rgba(0,0,0,.06) }
+html[data-theme="dark"] .card{ background:#222831; border-color:#393E46; box-shadow:0 6px 18px rgba(0,0,0,.35) }
+.card::before{ content:""; position:absolute; left:0; top:0; height:6px; width:100%; border-top-left-radius:16px; border-top-right-radius:16px; background:var(--accent,#e5e7eb) }
+
+.card--philosophie{ --accent: var(--tag-philosophie); }
+.card--erdkunde{ --accent: var(--tag-erdkunde); }
+.card--geschichte{ --accent: var(--tag-geschichte); }
+.card--physik{ --accent: var(--tag-physik); }
+.card--kunst{ --accent: var(--tag-kunst); }
+.card--sowi{ --accent: var(--tag-sowi); }
+.card--deutsch{ --accent: var(--tag-deutsch); }
+.card--sport{ --accent: var(--tag-sport); }
+.card--mathe{ --accent: var(--tag-mathe); }
+.card--chemie{ --accent: var(--tag-chemie); }
+.card--informatik{ --accent: var(--tag-informatik); }
+
+.card h3{ margin:6px 0 8px; font-size:1.06rem }
+.card .muted{ opacity:.8; margin:0 0 10px }
+.card-thumb{ width:64px; height:64px; object-fit:cover; border-radius:12px; display:block; margin:6px 0 }
+
+.card .row-tags{ display:flex; align-items:center; justify-content:space-between; margin-top:8px }
+.card .row-tags .left{ display:flex; gap:8px; align-items:center }
+.pill-tag{ display:inline-block; padding:2px 8px; border-radius:999px; font-size:.78rem; background:#fff; border:1px solid currentColor; color:#111 }
+html[data-theme="dark"] .pill-tag{ background:#222831; color:#DFD0B8; border-color:#948979 }
+
+.badge{ display:inline-block; padding:2px 8px; border-radius:999px; font-size:.75rem; }
+.badge-done{ background:#22c55e20; color:#16a34a; border:1px solid #16a34a33 }
+.badge-wip{ background:#f59e0b20; color:#d97706; border:1px solid #d9770633 }
+.badge-test{ background:#6b728020; color:#374151; border:1px solid #37415133 }
+.badge-soon{ background:#ef444420; color:#b91c1c; border:1px solid #b91c1c33 }
+
+.card .actions{ margin-top:12px }
+.btn.btn-primary{ display:inline-block; padding:8px 14px; border-radius:10px; background:#e6f0ff; border:1px solid #cfe0ff; text-decoration:none }
+.btn.btn-primary:hover{ filter:brightness(0.98) }
+</style>
+
+<style>
+          /* Clean, unified dropdown buttons */
+          .dropdown{ position:absolute; top:72px; right:20px; background:var(--card); border:1px solid var(--border); border-radius:14px; box-shadow:var(--shadow); min-width:280px; display:none; z-index:70; overflow:hidden; padding:10px }
+          .dropdown.open{ display:block }
+          .menu-stack{ display:flex; flex-direction:column; gap:8px }
+          .btn{ display:inline-flex; align-items:center; gap:8px; padding:10px 12px; border-radius:12px; border:1px solid var(--border); background:var(--card); cursor:pointer; text-decoration:none; color:var(--text); font-weight:600; justify-content:space-between }
+          .btn-menu{ width:100% }
+          .btn:hover{ box-shadow:0 4px 14px rgba(2,6,23,.10) }
+          html[data-theme="dark"] .btn:hover{ box-shadow:0 6px 20px rgba(0,0,0,.35) }
+        </style>
+</head>
+<body>
+
+  
+  <header>
+    <div class="wrap">
+      <div class="left">
+        <a class="brand" href="index.html">oberstufe.site</a>
+      </div>
+      <nav class="nav">
+        <a href="index.html" data-i18n="nav_home" class="">Home</a>
+        <a href="powerpoints.html" data-i18n="nav_pp" class="active">PowerPoints</a>
+        <a href="videos.html" data-i18n="nav_videos" class="">Videos</a>
+      </nav>
+      <div class="right"><button class="menu-btn" id="menuBtn" aria-haspopup="true" aria-expanded="false" aria-label="Menü">
+          <span class="menu-icon" aria-hidden="true"><span class="bar"></span><span class="bar"></span><span class="bar"></span></span>
+        </button><div class="dropdown" id="menuList" role="menu" aria-label="Menü">
+  <div class="menu-stack">
+    <a href="javascript:void(0)" class="btn btn-menu" data-modal="modalSettings">Einstellungen</a>
+    <a href="javascript:void(0)" class="btn btn-menu" data-modal="modalChangelog">Changelog</a>
+    <a href="javascript:void(0)" class="btn btn-menu" data-modal="modalLegend">Legende</a>
+    <a href="javascript:void(0)" class="btn btn-menu" data-modal="modalContact">Kontakt</a>
+    <a href="/admin" target="_blank" rel="noopener" class="btn btn-menu">Admin&nbsp;Login</a>
+  </div>
+</div></div></div></div></div>
+      </div>
+    </div>
+  </header>
+
+
+
+  <section class="hero">
+    <div class="container">
+      <h1 data-i18n="pp_title">Willkommen bei oberstufe.site PowerPoints</h1>
+      <p data-i18n="pp_sub">Sammlung von Präsentationen, die wir im Unterricht erstellt haben.</p>
+      <div class="search-wrap">
+        <div class="search"><input id="searchInput" type="search" placeholder="Suche nach Titeln, Autor:innen oder Tags … (z. B. Physik, Erdkunde)"><span class="hint" aria-hidden="true">⌘/Ctrl+K</span></div>
+      </div>
+    </div>
+  </section>
+
+  <nav class="subject-nav">
+    <div class="subject-inner container">
+      <a class="chip chip--physik" class="chip chip--physik" class="chip chip--physik" href="#physik"><span class="tag physik">Physik</span></a>
+      <a class="chip chip--philosophie" class="chip chip--philosophie" class="chip chip--philosophie" href="#philosophie"><span class="tag philosophie">Philosophie</span></a>
+      <a class="chip chip--erdkunde" class="chip chip--erdkunde" class="chip chip--erdkunde" href="#erdkunde"><span class="tag erdkunde">Erdkunde</span></a>
+      <a class="chip chip--geschichte" class="chip chip--geschichte" class="chip chip--geschichte" href="#geschichte"><span class="tag geschichte">Geschichte</span></a>
+      <a class="chip chip--sowi" class="chip chip--sowi" class="chip chip--sowi" href="#sowi"><span class="tag sowi">SoWi</span></a>
+      <a class="chip chip--mathe" class="chip chip--mathe" class="chip chip--mathe" href="#mathe"><span class="tag">Mathe</span></a>
+      <a class="chip chip--deutsch" class="chip chip--deutsch" class="chip chip--deutsch" href="#deutsch"><span class="tag">Deutsch</span></a>
+      <a class="chip chip--sport" class="chip chip--sport" class="chip chip--sport" href="#sport"><span class="tag">Sport</span></a>
+      <a class="chip chip--chemie" class="chip chip--chemie" class="chip chip--chemie" href="#chemie"><span class="tag">Chemie</span></a>
+      <a class="chip chip--informatik" class="chip chip--informatik" class="chip chip--informatik" href="#informatik"><span class="tag">Informatik</span></a>
+    </div>
+  </nav>
+
+  <section id="physik" class="subject container">
+    <h2 data-i18n="pp_nav_physik">Physik</h2>
+<div class="card-grid two-cols" data-tag="physik"></div>
+
+    <p class="sub" data-i18n="sec_physik">Präsentationen aus dem Physikunterricht</p>
+    <div class="grid">
+      <article class="card card--physik">
+        <h3>Postulate der Physik</h3>
+        <p>Alles zu den Postulaten der Physik und mehr.</p>
+        <p class="project-note">Von Kian und Kamil.</p>
+        <div class="tags"><span class="tag physik">Physik</span></div>
+        <div class="actions"><a target="_blank" class="ghost" href="presentations/postulate-der-physik.pdf" download data-i18n="download">Download</a></div>
+        <div class="status green">Fertig</div>
+      </article>
+      <article class="card card--physik">
+        <h3>Kernkraft</h3>
+        <p>Grundlagen, Chancen und Risiken der Kernenergie.</p>
+        <p class="project-note">Von Kian und Kamil.</p>
+        <div class="tags"><span class="tag physik">Physik</span><span class="tag erdkunde">Erdkunde</span></div>
+        <div class="actions"><a target="_blank" class="ghost" href="presentations/kernkraft.pdf" download data-i18n="download">Download</a></div>
+        <div class="status green">Fertig</div>
+      </article>
+    </div>
+  </section>
+
+  <section id="philosophie" class="subject container">
+    <h2 data-i18n="pp_nav_phil">Philosophie</h2>
+<div class="card-grid two-cols" data-tag="philosophie"></div>
+
+    <p class="sub" data-i18n="sec_phil">Philosophie-Themen und Denkmodelle</p>
+    <div class="grid">
+      <article class="card card--philosophie">
+        <h3>Utilitarismus – Squid Game</h3>
+        <p>Einführung in den Utilitarismus mit Beispiel aus Squid Game.</p>
+        <p class="project-note">Von Kian, Mark und Basit.</p>
+        <div class="tags"><span class="tag philosophie">Philosophie</span></div>
+        <div class="actions"><a target="_blank" class="ghost" href="presentations/utilitarismus-squid-game.pdf" download data-i18n="download">Download</a></div>
+        <div class="status green">Fertig</div>
+      </article>
+      <article class="card card--philosophie">
+        <h3>Buddhismus</h3>
+        <p>Grundlagen und Philosophie des Buddhismus.</p>
+        <p class="project-note">Von Kian, Mark, Basit, Kamil und Konstantin.</p>
+        <div class="tags"><span class="tag philosophie">Philosophie</span></div>
+        <div class="actions"><a target="_blank" class="ghost" href="presentations/buddhismus.pdf" download data-i18n="download">Download</a></div>
+        <div class="status green">Fertig</div>
+      </article>
+    </div>
+  </section>
+
+  <section id="erdkunde" class="subject container">
+    <h2 data-i18n="pp_nav_geo">Erdkunde</h2>
+<div class="card-grid two-cols" data-tag="erdkunde"></div>
+
+    <p class="sub" data-i18n="sec_geo">Geographie & Umwelt</p>
+    <div class="grid">
+      <article class="card card--erdkunde">
+        <h3>Die Immerfeuchten Tropen</h3>
+        <p>Klima und Vegetation der immerfeuchten Tropen.</p>
+        <p class="project-note">Von Kian und Kamil.</p>
+        <div class="tags"><span class="tag erdkunde">Erdkunde</span></div>
+        <div class="actions"><a target="_blank" class="ghost" href="presentations/die-immerfeuchten-tropen.pdf" download data-i18n="download">Download</a></div>
+        <div class="status green">Fertig</div>
+      </article>
+      <article class="card card--erdkunde">
+        <h3>Fukushima</h3>
+        <p>Ursachen und Folgen der Reaktorkatastrophe in Fukushima.</p>
+        <p class="project-note">Von Kian und Kamil.</p>
+        <div class="tags"><span class="tag erdkunde">Erdkunde</span></div>
+        <div class="actions"><a target="_blank" class="ghost" href="presentations/fukushima.pdf" download data-i18n="download">Download</a></div>
+        <div class="status green">Fertig</div>
+      </article>
+    </div>
+  </section>
+
+  <section id="geschichte" class="subject container">
+    <h2 data-i18n="pp_nav_hist">Geschichte</h2>
+<div class="card-grid two-cols" data-tag="geschichte"></div>
+
+    <p class="sub" data-i18n="sec_hist">Historische Themen</p>
+    <div class="grid">
+      <article class="card card--geschichte">
+        <h3>Die Französische Revolution</h3>
+        <p>Ursachen, Verlauf und Folgen der Revolution in Frankreich.</p>
+        <p class="project-note">Von Kian und Karl.</p>
+        <div class="tags"><span class="tag geschichte">Geschichte</span></div>
+        <div class="actions"><a target="_blank" class="ghost" href="presentations/die-franzosische-revolution.pdf" download data-i18n="download">Download</a></div>
+        <div class="status green">Fertig</div>
+      </article>
+    </div>
+  </section>
+
+  <section id="sowi" class="subject container">
+    <h2 data-i18n="pp_nav_sowi">SoWi</h2>
+<div class="card-grid two-cols" data-tag="sowi"></div>
+
+    <p class="sub" data-i18n="sec_sowi">Sozialwissenschaften & Politik</p>
+    <div class="grid">
+      <article class="card card--sowi">
+        <h3>Der Indien–Pakistan-Konflikt</h3>
+        <p>Hintergründe und Verlauf des Konflikts zwischen Indien und Pakistan.</p>
+        <p class="project-note">Von Kian, Kamil und Basit.</p>
+        <div class="tags"><span class="tag sowi">SoWi</span></div>
+        <div class="actions"><a target="_blank" class="ghost" href="presentations/der-indienpakistan-konflikt.pdf" download data-i18n="download">Download</a></div>
+        <div class="status green">Fertig</div>
+      </article>
+    </div>
+  </section>
+
+  <section id="mathe" class="subject container">
+    <h2 data-i18n="pp_nav_math">Mathe</h2>
+<div class="card-grid two-cols" data-tag="mathe"></div>
+
+    <p class="sub" data-i18n="sec_math">Mathematik – Material folgt</p>
+    <div class="grid">
+      <article class="card">
+        <h3 data-i18n="coming_title">Coming soon</h3>
+        <p data-i18n="coming_desc">Material folgt in Kürze.</p>
+        <div class="actions"><a target="_blank" class="ghost" href="presentations/mathe.pdf" style="opacity:.6; pointer-events:none;" data-i18n="download">Download</a></div>
+        <div class="status yellow">In Arbeit</div>
+      </article>
+    </div>
+  </section>
+
+  <section id="deutsch" class="subject container">
+    <h2 data-i18n="pp_nav_de">Deutsch</h2>
+<div class="card-grid two-cols" data-tag="deutsch"></div>
+
+    <p class="sub" data-i18n="sec_de">Deutsch – Material folgt</p>
+    <div class="grid">
+      <article class="card">
+        <h3 data-i18n="coming_title">Coming soon</h3>
+        <p data-i18n="coming_desc">Material folgt in Kürze.</p>
+        <div class="actions"><a target="_blank" class="ghost" href="presentations/deutsch.pdf" style="opacity:.6; pointer-events:none;" data-i18n="download">Download</a></div>
+        <div class="status yellow">In Arbeit</div>
+      </article>
+    </div>
+  </section>
+
+  <section id="sport" class="subject container">
+    <h2 data-i18n="pp_nav_sp">Sport</h2>
+<div class="card-grid two-cols" data-tag="sport"></div>
+
+    <p class="sub" data-i18n="sec_sp">Sport – Material folgt</p>
+    <div class="grid">
+      <article class="card">
+        <h3 data-i18n="coming_title">Coming soon</h3>
+        <p data-i18n="coming_desc">Material folgt in Kürze.</p>
+        <div class="actions"><a target="_blank" class="ghost" href="presentations/sport.pdf" style="opacity:.6; pointer-events:none;" data-i18n="download">Download</a></div>
+        <div class="status yellow">In Arbeit</div>
+      </article>
+    </div>
+  </section>
+
+  <section id="chemie" class="subject container">
+    <h2 data-i18n="pp_nav_ch">Chemie</h2>
+<div class="card-grid two-cols" data-tag="chemie"></div>
+
+    <p class="sub" data-i18n="sec_ch">Chemie – Material folgt</p>
+    <div class="grid">
+      <article class="card">
+        <h3 data-i18n="coming_title">Coming soon</h3>
+        <p data-i18n="coming_desc">Material folgt in Kürze.</p>
+        <div class="actions"><a target="_blank" class="ghost" href="presentations/chemie.pdf" style="opacity:.6; pointer-events:none;" data-i18n="download">Download</a></div>
+        <div class="status yellow">In Arbeit</div>
+      </article>
+    </div>
+  </section>
+
+  <section id="informatik" class="subject container">
+    <h2 data-i18n="pp_nav_inf">Informatik</h2>
+<div class="card-grid two-cols" data-tag="informatik"></div>
+
+    <p class="sub" data-i18n="sec_inf">Informatik – Material folgt</p>
+    <div class="grid">
+      <article class="card">
+        <h3 data-i18n="coming_title">Coming soon</h3>
+        <p data-i18n="coming_desc">Material folgt in Kürze.</p>
+        <div class="actions"><a target="_blank" class="ghost" href="presentations/informatik.pdf" style="opacity:.6; pointer-events:none;" data-i18n="download">Download</a></div>
+        <div class="status yellow">In Arbeit</div>
+      </article>
+    </div>
+  </section>
+
+
+  <footer>
+    <div class="container footer-inner">
+      <a class="cta-button" href="add-website.html" data-i18n="cta_add">Projekt hinzufügen</a>
+      <div class="footer-meta">© 2025 oberstufe.site – v2.38a</div>
+      <div class="qr-in-footer" id="qrBlock" title="QR-Code">
+        <div class="share-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l5-5 5 5"/><path d="M12 12v2.38a"/></svg>
+          <span data-i18n="share_site">Teile diese Website!</span>
+        </div>
+        <img src="qr-placeholder.jpg" alt="QR-Code">
+      </div>
+    </div>
+  </footer>
+
+  <div id="overlayGlobal" class="overlay-backdrop"></div>
+
+  <div id="modalSettings" class="modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <div class="modal-header">
+      <h3 id="settingsTitle" data-i18n="settings_title">Einstellungen</h3>
+      <button id="closeSettings" class="btn">Schließen</button>
+    </div>
+    <div class="modal-body">
+      <div class="row-setting">
+        <span data-i18n="set_theme">Theme</span>
+        <div class="icon-toggle" role="group" aria-label="Theme">
+          <button id="themeLight" class="icon-btn" title="Hell" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+          </button>
+          <button id="themeDark" class="icon-btn" title="Dunkel" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="row-setting">
+        <span data-i18n="set_lang">Sprache</span>
+        <div>
+          <button id="langDe" class="btn" style="margin-right:6px;">DE</button>
+          <button id="langEn" class="btn">EN</button>
+        </div>
+      </div>
+      </div>
+      
+      
+    </div>
+  </div>
+
+  <div id="modalChangelog" class="modal" role="dialog" aria-modal="true" aria-labelledby="changelogTitle">
+    <div class="modal-header"><h3 id="changelogTitle">Changelog</h3><button id="closeChangelog" class="btn">Schließen</button>
+<ul><li>v2.14 – Navigation verbessert, Menü überarbeitet (21.09.2025)</li><li>v2.15 – Darkmode eingeführt (21.09.2025)</li><li>v2.16 – Footer überarbeitet (21.09.2025)</li><li>v2.17 – Scroll-Up Button eingefügt (21.09.2025)</li><li>v2.18 – Header/Navi Bugfixes (21.09.2025)</li><li>v2.19 – Design-Optimierungen, Animationen (21.09.2025)</li><li>v2.20 – Farbpalette angepasst (21.09.2025)</li><li>v2.21 – Changelog hinzugefügt (21.09.2025)</li><li>v2.22 – Kleine Layout-Fixes (21.09.2025)</li><li>v2.23 – Neue Version bereitgestellt (21.09.2025)</li><li>v2.24 – Bugfix Scroll-Up Button (21.09.2025)</li><li>v2.25 – Feedback Button hinzugefügt (21.09.2025)</li><li>v2.26 – Korrektur Scroll-Button Verhalten (21.09.2025)</li><li>v2.27 – Chips Design begonnen (21.09.2025)</li><li>v2.28 – Chips farbig (erste Version) (21.09.2025)</li><li>v2.29 – Chips Bugfix (korrekte Farben) (21.09.2025)</li><li>v2.30 – Chips Variante A umgesetzt (21.09.2025)</li><li>v2.31 – Chips Farben in allen Fächern gefixt (21.09.2025)</li><li>v2.32 – Dark Mode Kontrast & Elemente verbessert (21.09.2025)</li><li>v2.33 – Dark Mode Navy + Beige Akzente (21.09.2025)</li><li>v2.34 – Dark Mode Palette #222831/#393E46/#948979/#DFD0B8 (21.09.2025)</li><li>v2.35 – Dark Mode: Titel Anthrazit (21.09.2025)</li><li>v2.36 – Interne Robustheit verbessert (21.09.2025)</li><li>v2.37 – Listener/JS-Struktur bereinigt (21.09.2025)</li><li>v2.38 – Finales Update vor 2.38a Release (21.09.2025)</li></ul>
+</div>
+    <div class="modal-body">
+      <ul style="list-style:none; padding:0; margin:0;">
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#2563EB;">v1.0 – 18.09.2025</span> · Erste Veröffentlichung der Homepage</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#22C55E;">Erweiterungen – 18.09.2025</span> · Philexikon & Pieter Bruegel integriert</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#2563EB;">v2.0 – 18.09.2025</span> · Überarbeitetes Design</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#2563EB;">v2.1 – 18.09.2025</span> · Feinschliff</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#2563EB;">v2.2 – 19.09.2025</span> · Wiener Kongress, Suche & Tags</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#2563EB;">v2.4 – 20.09.2025</span> · QR im Footer, CTA, Design-Fixes</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#6B7280;">v2.6 – 20.09.2025</span> · Farben wie 12.4, FAQ-Akzente, Menü-Align Fix</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#22C55E;">v2.7 – 20.09.2025</span> · PowerPoints & Videos, Share-Hinweis, Header-Navigation</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#22C55E;">v2.7e – 20.09.2025</span> · Komplettpaket (alle Unterseiten), PPT-Downloads vorbereitet</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#2563EB;">v2.8 – 20.09.2025</span> · Fächer-Abschnitte (PP), DE/EN, QR-Option, „Unsere Websites“</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#22C55E;">v2.8a – 20.09.2025</span> · PP-Chips als Tags, Add-Seite 3 Spalten</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#6B7280;">v2.8b – 20.09.2025</span> · Bugfix: getrennte Seiten, saubere Header/Footer</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#6B7280;">v2.8c – 20.09.2025</span> · Bugfix: kein Zusammenkleben der Seiten</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#6B7280;">v2.8d – 20.09.2025</span> · Einstellungen repariert, Chips hübscher, CTA auf Add-Seite ausgeblendet</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#2563EB;">v2.9 – 20.09.2025</span> · Changelog-Overlay, Dark Mode verbessert, Chips Variante A, Legende & Sprache gefixt</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#2563EB;">v2.10 – 20.09.2025</span> · Hamburger-Icon (3 Striche) & Bugfixes; neue Fachfarben</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#2563EB;">v2.11 – 20.09.2025</span> · Menü-Overlays (Kontakt/Changelog/Legende/Einstellungen), Theme-Switch mit SVG-Sonne/Mond, vollständige DE/EN, Fachfarben fix</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="modalLegend" class="modal" role="dialog" aria-modal="true" aria-labelledby="legendTitle">
+    <div class="modal-header"><h3 id="legendTitle">Legende</h3><button id="closeLegend" class="btn">Schließen</button></div>
+    <div class="modal-body">
+      <h4 style="margin:10px 0 6px">Tags</h4>
+      <p>Farbige Schlagworte geben die Fachbereiche an:</p>
+      <div class="legend-tags">
+<span class="tag chemie">Chemie</span>
+        <span class="tag deutsch">Deutsch</span>
+        <span class="tag erdkunde">Erdkunde</span>
+        <span class="tag geschichte">Geschichte</span>
+        <span class="tag informatik">Informatik</span>
+        <span class="tag kunst">Kunst</span>
+        <span class="tag mathe">Mathe</span>
+        <span class="tag physik">Physik</span>
+        <span class="tag philosophie">Philosophie</span>
+        <span class="tag sowi">SoWi</span>
+        <span class="tag sport">Sport</span>
+</div>
+
+      <h4 style="margin:16px 0 6px">Status‑Badges</h4>
+      <p>Zeigen den aktuellen Stand eines Projekts:</p>
+      <div class="legend-status">
+        <span class="status green">Fertig</span>
+        <span class="status yellow">In Arbeit</span>
+        <span class="status red">Test</span>
+        <span class="status blue">Coming&nbsp;Soon</span>
+</div>
+      <ul class="legend-list">
+  <ul class="status-list">
+    <li class="status-item"><span class="status green">Fertig</span><span class="name">Fertig</span><span class="desc">Projekt/Präsentation ist abgeschlossen.</span></li>
+    <li class="status-item"><span class="status yellow">In Arbeit</span><span class="name">In Arbeit</span><span class="desc">Inhalte werden noch erstellt oder überarbeitet.</span></li>
+    <li class="status-item"><span class="status red">Test</span><span class="name">Test</span><span class="desc">Entwurf oder Beta; kann Fehler enthalten.</span></li>
+    <li class="status-item"><span class="status blue">Coming Soon</span><span class="name">Coming Soon</span><span class="desc">Geplant, aber noch nicht veröffentlicht.</span></li>
+  </ul>
+</ul>
+
+    </div>
+    </div>
+  </div>
+
+  <div id="modalContact" class="modal" role="dialog" aria-modal="true" aria-labelledby="contactTitle">
+    <div class="modal-header"><h3 id="contactTitle" data-i18n="contact_title">Kontakt</h3><button id="closeContact" class="btn">Schließen</button></div>
+    <div class="modal-body">
+      <p><strong>E-Mail:</strong> <a href="mailto:oberstufesite@gmail.com" class="link">oberstufesite@gmail.com</a></p>
+      <p><a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLSc7hitAkvgDHXnOKgRpvolibMhm3iHeag_V-Azm4Mz8zef63w/viewform?usp=dialog" target="_blank" rel="noopener" data-i18n="contact_form">Zum Feedback-Formular</a></p>
+    </div>
+  </div>
+
+  <a class="feedback-btn" id="feedbackBtn" href="https://docs.google.com/forms/d/e/1FAIpQLSc7hitAkvgDHXnOKgRpvolibMhm3iHeag_V-Azm4Mz8zef63w/viewform?usp=dialog" target="_blank" rel="noopener" data-i18n="feedback">Feedback</a>
+  <button class="to-top" id="toTopBtn" aria-label="Nach oben scrollen" title="Nach oben"><svg viewBox="0 0 48 48" width="22" height="22" aria-hidden="true"><circle cx="24" cy="24" r="17" fill="none" stroke="rgba(255,255,255,.65)" stroke-width="2"/><path d="M16 26l8-8 8 8" fill="none" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+
+
+
+<script>
+/* v2.17 theme js */
+(function(){
+  const themeLight=document.getElementById('themeLight');
+  const themeDark=document.getElementById('themeDark');
+  function setTheme(next){
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('theme', next);}catch(e){}
+    if(themeLight) themeLight.classList.toggle('active', next==='light');
+    if(themeDark) themeDark.classList.toggle('active', next==='dark');
+  }
+  const saved=localStorage.getItem('theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light');
+  setTheme(saved);
+  themeLight && themeLight.addEventListener('click', ()=> setTheme('light'));
+  themeDark && themeDark.addEventListener('click', ()=> setTheme('dark'));
+})();
+</script>
+
+
+
+
+<script>
+/* v2.26 unified scroll visibility */
+(function(){
+  const toTopBtn = document.getElementById('toTopBtn');
+  const feedbackBtn = document.getElementById('feedbackBtn');
+  function sync(){
+    const y = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    const show = y > 160;
+    if(toTopBtn) toTopBtn.classList.toggle('show', show);
+    if(feedbackBtn) feedbackBtn.classList.toggle('show', show);
+  }
+  window.addEventListener('scroll', sync, {passive:true});
+  sync();
+  if(toTopBtn){
+    toTopBtn.addEventListener('click', function(){
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+})();
+</script>
+
+
+<script>
+/* v2.37 – Language listeners harden */
+(function(){
+  function safeApply(lang){
+    if (typeof applyI18N === 'function') { applyI18N(lang); }
+  }
+  var langDeBtn = document.getElementById('langDe');
+  var langEnBtn = document.getElementById('langEn');
+  if(langDeBtn){ langDeBtn.onclick = function(){ safeApply('de'); }; }
+  if(langEnBtn){ langEnBtn.onclick = function(){ safeApply('en'); }; }
+})();
+</script>
+
+
+<script>
+// v2.41a helpers
+(function(){
+  // Title anthracite on index & 200
+  try{
+    var h1 = document.querySelector('h1');
+    if(h1 && /Willkommen auf oberstufe\.site/i.test(h1.textContent)){
+      h1.classList.add('site-title','title-anthrazit');
+    }
+  }catch(e){}
+
+  // Mark feedback card to color links blue
+  try{
+    document.querySelectorAll('.card, section, div').forEach(function(el){
+      if(/Kann ich Feedback geben oder Ideen einreichen\?/i.test(el.textContent)){
+        // add class to closest card-like container
+        var target = el.closest('.card') || el;
+        target.classList.add('feedback-card');
+      }
+    });
+  }catch(e){}
+})();
+</script>
+
+
+<!-- Netlify Identity (login status only) -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+<style>
+  .admin-only{ display:none }
+  .admin-yes .admin-only{ display:initial }
+</style>
+
+<div id="cardsPresGrid" class="card-grid two-cols"></div>
+
+<script>
+(async function(){
+  try{
+    const res = await fetch('/data/cards.json', {cache:'no-cache'});
+    const data = await res.json();
+    const list = (data.cards||[]).filter(c => (c.is_published !== false) && (c.type === 'presentation'));
+    const el = document.getElementById('cardsPresGrid');
+    if(!el) return;
+    el.innerHTML = list.map(c => `
+      <a class="card card--${c.tag||'default'}" href="${c.url}" target="_blank" rel="noopener">
+        ${c.image_url ? `<img class="card-thumb" src="${c.image_url}" alt="">` : ''}
+        <h3>${c.title}</h3>
+        ${c.subtitle ? `<p class="muted">${c.subtitle}</p>` : ''}
+        <div class="meta"><span class="tag ${c.tag||''}">${c.tag||''}</span><span class="type">${c.type||''}</span></div>
+      </a>
+    `).join('');
+  }catch(e){ console.error('cards load error', e); }
+})();
+</script>
+
+<style>
+.card-grid.two-cols{ display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:16px }
+@media (max-width: 640px){ .card-grid.two-cols{ grid-template-columns: 1fr } }
+.card-thumb{ width:100%; height:140px; object-fit:cover; border-radius:12px }
+.meta{ display:flex; gap:8px; margin-top:8px; font-size:.9rem; opacity:.8 }
+</style>
+
+
+
+
+
+<script>
+(function(){
+  function badgeHTML(status){
+    const m={ fertig:['Fertig','badge-done'], in_arbeit:['In Arbeit','badge-wip'], test:['Test','badge-test'], coming_soon:['Coming Soon','badge-soon'] };
+    const x=m[status]; return x?`<span class="badge ${x[1]}">${x[0]}</span>`:'';
+  }
+  function tagPill(tag){
+    if(!tag) return '';
+    const label = (tag==='sowi'?'SoWi':tag.charAt(0).toUpperCase()+tag.slice(1));
+    return `<span class="pill-tag tag-${tag}">${label}</span>`;
+  }
+  function cardHTML(c){
+    const tag=(c.tag||'').toLowerCase();
+    return `<div class="card card--${tag}">
+      ${c.image_url?`<img class="card-thumb" src="${c.image_url}" alt="">`:''}
+      <h3>${c.title||''}</h3>
+      ${c.subtitle?`<p class="muted">${c.subtitle}</p>`:''}
+      <div class="row-tags"><div class="left">${tagPill(tag)}</div><div class="right"></div></div>
+      <div class="actions"><a class="btn btn-primary" href="${c.url}" target="_blank" rel="noopener">Öffnen</a></div>
+    </div>`;
+  }
+  async function loadCards(){
+    const r=await fetch('/data/cards.json',{cache:'no-cache'});
+    const d=await r.json(); return (d.cards||[]).filter(c=>c.is_published!==false);
+  }
+  function renderWebsites(cards){
+    const grid=document.getElementById('websitesGrid'); if(!grid) return;
+    const webs=cards.filter(c=>(c.type||'')==='website');
+    grid.innerHTML = webs.map(cardHTML).join('');
+  }
+  function renderPresentations(cards){
+    const pres=cards.filter(c=>(c.type||'')==='presentation');
+    document.querySelectorAll('[data-tag]').forEach(grid=>{
+      const tag=(grid.getAttribute('data-tag')||'').toLowerCase();
+      const items=pres.filter(c=>(c.tag||'').toLowerCase()===tag);
+      grid.innerHTML = items.map(cardHTML).join('');
+    });
+  }
+  document.addEventListener('DOMContentLoaded', async ()=>{
+    const cards=await loadCards();
+    if(/powerpoints/i.test(location.pathname)) renderPresentations(cards);
+    else renderWebsites(cards);
+  });
+})();
+</script>
+
+
+
+
+<script>
+// v2.70 Menu + Modals + Theme
+(function(){
+  const btn = document.getElementById('menuBtn');
+  const list = document.getElementById('menuList');
+  const overlay = document.getElementById('overlayGlobal');
+
+  function openMenu(){ if(list){ list.classList.add('open'); } if(btn){ btn.classList.add('open'); btn.setAttribute('aria-expanded','true'); } }
+  function closeMenu(){ if(list){ list.classList.remove('open'); } if(btn){ btn.classList.remove('open'); btn.setAttribute('aria-expanded','false'); } }
+
+  btn && btn.addEventListener('click', (e)=>{ e.stopPropagation(); list && (list.classList.contains('open')?closeMenu():openMenu()); });
+
+  document.addEventListener('click', (e)=>{
+    if(list && !list.contains(e.target) && !btn.contains(e.target)) closeMenu();
+  });
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ closeMenu(); closeAllModals(); }});
+
+  // Modals
+  const modals = Array.from(document.querySelectorAll('.modal'));
+  function closeAllModals(){ modals.forEach(m=>m.classList.remove('open')); overlay && overlay.classList.remove('show'); }
+  function openModal(id){ closeMenu(); const m=document.getElementById(id); if(m){ m.classList.add('open'); overlay && overlay.classList.add('show'); } }
+
+  document.querySelectorAll('#menuList [data-modal]').forEach(el=>{
+    el.addEventListener('click', ()=> openModal(el.getAttribute('data-modal')));
+  });
+  overlay && overlay.addEventListener('click', closeAllModals);
+  document.querySelectorAll('[data-close]').forEach(x=> x.addEventListener('click', closeAllModals));
+
+  // Theme
+  function setTheme(next){
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('theme', next);}catch(e){}
+    const tL=document.getElementById('themeLight'); const tD=document.getElementById('themeDark');
+    tL && tL.classList.toggle('active', next==='light');
+    tD && tD.classList.toggle('active', next==='dark');
+  }
+  const saved = (function(){
+    try{ return localStorage.getItem('theme'); }catch(e){ return null; }
+  })() || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light');
+  setTheme(saved);
+
+  const tL=document.getElementById('themeLight'); const tD=document.getElementById('themeDark');
+  tL && tL.addEventListener('click', ()=> setTheme('light'));
+  tD && tD.addEventListener('click', ()=> setTheme('dark'));
+})();
+</script>
+
+<script>
+// v2.61 – Client-side search minimal (no counter, no layout shift)
+(function(){
+  const input = document.getElementById('searchInput');
+  if(!input) return;
+  function norm(t){ return (t||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
+  function items(){ return Array.from(document.querySelectorAll('.card')); }
+  function matches(el, q){
+    if(!q) return true;
+    const hay = norm(el.textContent);
+    const tags = (el.getAttribute('data-tags')||'') + ' ' + (el.getAttribute('data-tag')||'');
+    return hay.includes(q) || norm(tags).includes(q);
+  }
+  function apply(q){
+    const qn = norm(q);
+    items().forEach(el=>{ el.style.display = matches(el, qn) ? '' : 'none'; });
+  }
+  input.addEventListener('input', ()=> apply(input.value));
+  document.addEventListener('keydown', (e)=>{ if((e.ctrlKey||e.metaKey) && (e.key==='k'||e.key==='K')){ e.preventDefault(); input.focus(); }});
+})();
+</script>
+
+</body>
+</html>

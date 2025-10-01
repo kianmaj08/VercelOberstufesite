@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>oberstufe.site</title>
+  <style>
+  :root{
+    --bg:#F3F5F9; --text:#0B1220; --muted:#4B5563; --primary:#2563EB; --primary-dark:#1D4ED8;
+    --yellow:#FDE68A; --lightblue:#93C5FD; --lightbrown:#D6B48C;
+    --physik:#374151; --erdkunde:#34D399; --sowi:#8B5CF6;
+    --card:#FFFFFF; --border:#E2E8F0; --shadow:0 8px 30px rgba(2,6,23,.08);
+    --radius:16px; --maxw:1100px;
+    --status-green:#10B981; --status-yellow:#F59E0B; --status-red:#EF4444;
+    --link:#2563EB; --link-strong:#1E40AF;
+  }
+  html[data-theme="dark"]{
+    --bg:#0B0E14; --text:#E6E6EB; --muted:#B1B6C2; --primary:#5B8CFF; --primary-dark:#3D6BFF;
+    --yellow:#F1D37E; --lightblue:#87B6FF; --lightbrown:#C1A074; --physik:#9CA3AF; --erdkunde:#34D399; --sowi:#A78BFA;
+    --card:#10141E; --border:#1E2636; --shadow:0 10px 30px rgba(0,0,0,.35); --link:#8AB3FF; --link-strong:#BFD1FF;
+  }
+  *{ box-sizing:border-box } 
+  body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial; background:var(--bg); color:var(--text); line-height:1.5 }
+  a{ color:inherit; text-decoration:none }
+  .container{ width:100%; max-width:var(--maxw); margin:0 auto; padding:0 20px }
+
+  header{ position:sticky; top:0; z-index:60; backdrop-filter:saturate(1.2) blur(6px); background:linear-gradient(135deg,#E8EEF8,#F3F5F9); border-bottom:1px solid var(--border) }
+  html[data-theme="dark"] header{ background:linear-gradient(135deg,#0E1424,#0B0E14) }
+  .header-inner{ display:flex; align-items:center; justify-content:space-between; height:60px }
+  .brand a{ font-weight:700; letter-spacing:.2px; white-space:nowrap }
+  .right{ display:flex; align-items:center; gap:16px }
+  .topnav{ display:flex; align-items:center; gap:14px }
+  .topnav a{ position:relative; padding:2px 4px; font-weight:600 }
+  .topnav a::after{ content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; background:transparent; transform:scaleX(0); transform-origin:left; transition:transform .25s ease, background .25s ease }
+  .topnav a.active::after{ background:var(--primary); transform:scaleX(1) }
+
+  .actions{ display:flex; align-items:center; gap:10px }
+  .menu-btn{ width:40px; height:40px; border-radius:12px; border:1px solid var(--border); background:var(--card); display:inline-flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:var(--shadow); position:relative }
+  .menu-dots{ font-size:20px; line-height:1 }
+  .dropdown{ position:absolute; top:72px; right:20px; background:var(--card); border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow); min-width:300px; display:none; overflow:hidden; z-index:70 }
+  .dropdown.open{ display:block }
+  .dropdown .row{ display:flex; align-items:center; justify-content:space-between; padding:10px 12px; border-bottom:1px dashed var(--border) }
+  .dropdown .row:last-child{ border-bottom:none }
+  .btn{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; border:1px solid var(--border); background:var(--card); cursor:pointer }
+  .btn.primary{ border-color:#93C5FD; background:#EFF6FF; color:#1E3A8A; font-weight:700 }
+
+  .switch{ position:relative; width:52px; height:28px; background:#E5E7EB; border:1px solid var(--border); border-radius:999px; cursor:pointer }
+  .switch .knob{ position:absolute; top:2px; left:2px; width:24px; height:24px; background:#fff; border-radius:50%; box-shadow:var(--shadow); transition:left .2s ease }
+  .switch.on{ background:#C7D2FE } .switch.on .knob{ left:26px }
+
+  .hero{ padding:36px 0 24px; text-align:center }
+  .hero h1{ margin:0 0 6px 0; font-size:clamp(1.9rem,4.2vw,2.6rem) }
+  .hero p{ margin:0; color:var(--muted) }
+
+  .search-wrap{ display:flex; justify-content:center; margin-top:12px }
+  .search{ width:min(680px,92vw); display:flex; align-items:center; gap:8px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:10px 12px; box-shadow:var(--shadow) }
+  .search input{ width:100%; border:none; outline:none; background:transparent; color:var(--text); font-size:1rem }
+  .search .hint{ color:var(--muted); font-size:.9rem }
+
+  .section{ padding:22px 0 }
+  .grid{ display:grid; grid-template-columns:repeat(12,1fr); gap:16px }
+  .card{ position:relative; grid-column:span 12; background:var(--card); border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow); padding:18px; min-height:180px; display:flex; flex-direction:column; gap:10px; transition:transform .15s ease, box-shadow .2s ease, border-color .2s ease; overflow:hidden }
+  .card::before{ content:""; position:absolute; left:0; top:0; right:0; height:6px; background:var(--yellow); border-top-left-radius:16px; border-top-right-radius:16px }
+  .card--blue::before{ background:var(--lightblue) } .card--brown::before{ background:var(--lightbrown) }
+  .card--physik::before{ background:var(--physik) } .card--erdkunde::before{ background:var(--erdkunde) } .card--sowi::before{ background:var(--sowi) } .card--philosophie::before{ background:var(--yellow) } .card--geschichte::before{ background:var(--lightbrown) }
+  .card h3{ margin:0; font-size:1.12rem } .card p{ margin:0; color:var(--muted) }
+  .project-note{ font-size:.9rem; color:#6B7280 }
+  @media (min-width:680px){ .card{ grid-column:span 6 } }
+
+  .tags{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px }
+  .tag{ font-size:.8rem; border-radius:999px; padding:2px 8px; border:1px solid var(--border) }
+  .tag.philosophie{ background:var(--yellow) } .tag.kunst{ background:var(--lightblue) } .tag.geschichte{ background:var(--lightbrown) }
+  .tag.physik{ background:var(--physik); color:#fff } .tag.erdkunde{ background:var(--erdkunde) } .tag.sowi{ background:var(--sowi); color:#fff }
+
+  .status{ position:absolute; right:12px; bottom:12px; font-size:.78rem; font-weight:700; color:#fff; padding:4px 8px; border-radius:999px; box-shadow:0 2px 8px rgba(0,0,0,.15) }
+  .status.green{ background:var(--status-green) } .status.yellow{ background:var(--status-yellow) } .status.red{ background:var(--status-red) }
+
+  .ghost{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; background:#EFF6FF; color:#1E3A8A; border:1px solid #DBEAFE; font-weight:600; transition:background-color .2s ease, transform .15s ease }
+  .ghost:hover{ background:#DBEAFE; transform:translateY(-1px) }
+
+  .info,.improvements{ background:#F9FAFB; border:1px solid var(--border); border-left:4px solid var(--primary); border-radius:16px; box-shadow:var(--shadow); padding:clamp(18px,3vw,24px); margin-top:18px }
+  html[data-theme="dark"] .info,html[data-theme="dark"] .improvements{ background:#0F141E }
+  .info h3,.improvements h3{ margin:0 0 10px 0; font-size:1.22rem; color:var(--primary) }
+  .info a.link{ color:var(--link); font-weight:600 } .info a.link:hover{ text-decoration:underline } .info a.mail{ color:var(--link-strong); font-weight:700 }
+
+  .faq{ margin-top:18px } .faq h3{ margin:0 0 10px 0; font-size:1.22rem; color:var(--primary) }
+  .faq-item{ background:#FFF; border:1px solid var(--border); border-radius:12px; padding:14px; margin:10px 0; box-shadow:var(--shadow) }
+  html[data-theme="dark"] .faq-item{ background:#0F141E }
+  .kw-philosophie{ color:#8a6c00 } .kw-kunst{ color:#1E40AF } .kw-geschichte{ color:#5B3A1E }
+
+  footer{ position:relative; padding:48px 0 56px; color:var(--muted); border-top:1px solid var(--border); margin-top:20px }
+  .footer-inner{ position:relative; text-align:center }
+  .cta-button{ display:inline-block; padding:12px 18px; border-radius:999px; border:2px solid #93C5FD; background:#EFF6FF; font-weight:800; box-shadow:0 8px 24px rgba(147,197,253,.35); color:#6D28D9 }
+  .cta-button:hover{ transform:translateY(-1px) }
+  .footer-meta{ margin-top:10px }
+  .qr-in-footer{ position:absolute; left:20px; bottom:-22px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:6px; box-shadow:var(--shadow); display:flex; align-items:center; gap:10px }
+  .qr-in-footer img{ display:block; width:120px; height:auto }
+  .share-label{ font-weight:700; color:var(--muted); display:flex; align-items:center; gap:8px }
+  .share-label svg{ width:20px; height:20px }
+
+  /* v2.21 to-top blue */
+.to-top{ position:fixed; right:18px; bottom:18px; display:none; width:46px; height:46px; border-radius:999px; border:2px solid #fff; background:transparent; box-shadow:0 10px 24px rgba(2,6,23,.25);  align-items:center; justify-content:center; transition:transform .15s ease, box-shadow .2s ease }
+.to-top:hover{ transform:translateY(-3px); box-shadow:0 14px 28px rgba(2,6,23,.35) }
+.to-top svg{ width:20px; height:20px; stroke:#fff; fill:none; stroke-width:2 }
+  .to-top.show{ display:flex } .feedback-btn{ position:fixed; right:68px; bottom:18px; display:none; align-items:center; justify-content:center; padding:10px 14px; border-radius:999px; border:1px solid #DBEAFE; background:#EFF6FF; box-shadow:var(--shadow); font-weight:700; color:#1E3A8A; z-index:65 }
+  .feedback-btn.show{ display:inline-flex } .feedback-btn:hover{ transform:translateY(-2px); border-color:#93C5FD }
+
+  @media (max-width:640px){ .qr-in-footer{ display:none } }
+
+  /* Subject nav (PP) */
+  .subject-nav{ position:sticky; top:60px; z-index:50; background:linear-gradient(135deg,#E8EEF8,#F3F5F9); border-bottom:1px solid var(--border) }
+  html[data-theme="dark"] .subject-nav{ background:linear-gradient(135deg,#0E1424,#0B0E14) }
+  .subject-inner{ display:flex; gap:10px; overflow:auto; padding:10px 20px }
+  .chip{ white-space:nowrap; padding:8px 14px; border-radius:999px; border:1px solid var(--border); display:inline-flex; align-items:center; gap:8px; box-shadow:0 1px 0 rgba(0,0,0,.03) }
+  .chip .tag{ margin:0 }
+  .chip.active{ outline:2px solid #93C5FD }
+
+  .subject{ scroll-margin-top:96px; padding-top:14px }
+  .subject h2{ margin:0 0 4px 0; font-size:1.3rem }
+  .subject .sub{ color:var(--muted); margin:0 0 10px 0 }
+
+  
+  .menu-icon{ position:relative; width:20px; height:14px }
+  .menu-icon .bar{ position:absolute; left:0; right:0; height:2.5px; background:var(--text); border-radius:2px; transition:transform .2s ease, opacity .2s ease, top .2s ease, bottom .2s ease }
+  .menu-icon .bar:nth-child(1){ top:0 }
+  .menu-icon .bar:nth-child(2){ top:50%; transform:translateY(-50%) }
+  .menu-icon .bar:nth-child(3){ bottom:0 }
+  .menu-btn.open .menu-icon .bar:nth-child(1){ top:50%; transform:translateY(-50%) rotate(45deg) }
+  .menu-btn.open .menu-icon .bar:nth-child(2){ opacity:0 }
+  .menu-btn.open .menu-icon .bar:nth-child(3){ bottom:auto; top:50%; transform:translateY(-50%) rotate(-45deg) }
+  .menu-btn:hover{ box-shadow:0 8px 18px rgba(2,6,23,.12) }
+
+  /* Header layout */
+/* v2.17 header right align */
+  header{ position:sticky; top:0; z-index:40; background:linear-gradient(180deg, rgba(99,102,241,.06), rgba(99,102,241,0)); border-bottom:1px solid var(--border) }
+  header .wrap{ max-width:var(--maxw); margin:0 auto; padding:10px 18px; display:flex; align-items:center; gap:16px }
+  header .left{ flex:0 0 auto }
+  header .brand{ font-weight:800; font-size:18px; text-decoration:none; color:var(--text) }
+  header .nav{ display:flex; gap:28px; align-items:center; margin-left:auto; margin-right:6px }
+  header .nav a{ font-weight:700; text-decoration:none; color:var(--text); padding:8px 2px; border-bottom:2px solid transparent }
+  header .nav a.active{ border-bottom-color: var(--primary) }
+  header .right{ flex:0 0 auto; display:flex; align-items:center; gap:8px }
+/* v2.16 header tune */
+  header{ position:sticky; top:0; z-index:40; background:linear-gradient(180deg, rgba(99,102,241,.06), rgba(99,102,241,0)); border-bottom:1px solid var(--border) }
+  header .wrap{ max-width:var(--maxw); margin:0 auto; padding:10px 18px; display:flex; align-items:center; gap:16px }
+  header .brand{ font-weight:800; font-size:18px; letter-spacing:.1px; text-decoration:none; color:var(--text) }
+  header .nav{ display:flex; gap:28px; align-items:center; margin-left:auto; margin-right:6px }
+  header .nav a{ font-weight:700; text-decoration:none; color:var(--text); padding:8px 2px; border-bottom:2px solid transparent }
+  header .nav a.active{ border-bottom-color: var(--primary) }
+  header .right{ display:flex; align-items:center; gap:8px }
+  .menu-btn{ width:40px; height:40px; border-radius:12px; border:1px solid var(--border); background:var(--card); display:inline-flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:var(--shadow); position:relative }
+  header{ position:sticky; top:0; z-index:40; background:linear-gradient(180deg, rgba(99,102,241,.06), rgba(99,102,241,0)); border-bottom:1px solid var(--border) }
+  header .wrap{ max-width:var(--maxw); margin:0 auto; padding:10px 18px; display:flex; align-items:center; gap:16px }
+  header .left{ flex:0 0 auto }
+  header .brand{ font-weight:800; text-decoration:none; color:var(--text) }
+  header .nav{ display:flex; gap:28px; align-items:center; margin-left:auto; margin-right:6px }
+  header .nav a{ text-decoration:none; color:var(--text); padding:6px 4px; border-bottom:2px solid transparent }
+  header .nav a.active{ border-bottom-color: var(--primary) }
+  header .right{ flex:0 0 auto; display:flex; align-items:center; gap:8px }
+  .menu-btn{ width:40px; height:40px; border-radius:12px; border:1px solid var(--border); background:var(--card); display:inline-flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:var(--shadow); position:relative }
+  /* Hamburger to X animation */
+  .menu-icon{ position:relative; width:20px; height:14px }
+  .menu-icon .bar{ position:absolute; left:0; right:0; height:2.5px; background:var(--text); border-radius:2px; transition:transform .2s ease, opacity .2s ease, top .2s ease, bottom .2s ease }
+  .menu-icon .bar:nth-child(1){ top:0 }
+  .menu-icon .bar:nth-child(2){ top:50%; transform:translateY(-50%) }
+  .menu-icon .bar:nth-child(3){ bottom:0 }
+  .menu-btn.open .menu-icon .bar:nth-child(1){ top:50%; transform:translateY(-50%) rotate(45deg) }
+  .menu-btn.open .menu-icon .bar:nth-child(2){ opacity:0 }
+  .menu-btn.open .menu-icon .bar:nth-child(3){ bottom:auto; top:50%; transform:translateY(-50%) rotate(-45deg) }
+
+  /* Dropdown polish */
+  .dropdown{ position:absolute; right:16px; top:60px; background:var(--card); border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow); padding:10px; display:none }
+  .dropdown.open{ display:block }
+  .dropdown .row{ margin:6px 0 }
+  .dropdown .btn{ width:100%; border:1.5px solid var(--primary); background:#fff }
+  html[data-theme="dark"] .dropdown .btn{ background:#111827 }
+  /* Settings overlay */
+  .overlay-backdrop{ position:fixed; inset:0; background:rgba(2,6,23,.45); backdrop-filter:blur(2px); display:none; z-index:90 }
+  .modal{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); width:min(720px,94vw); max-height:80vh; overflow:auto; background:var(--card); border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow); display:none; z-index:91 }
+  .modal-header{ padding:18px 18px 8px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center }
+  .modal-body{ padding:14px 18px }
+  .btn.linklike{ background:transparent; border:none; color:var(--link); font-weight:700; cursor:pointer }
+  .row-setting{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 0; border-bottom:1px dashed var(--border) }
+  .row-setting:last-child{ border-bottom:none }
+  .icon-toggle{ display:flex; gap:8px }
+  .icon-btn{ width:40px; height:32px; display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--border); background:var(--card); border-radius:10px; cursor:pointer }
+  .icon-btn.active{ background:#EFF6FF; border-color:#93C5FD }
+  .icon-btn svg{ width:18px; height:18px; stroke:currentColor }
+  /* Add-website: 3 cards in row, plain + soft */
+  .card--plain::before{ display:none }
+  .card--soft{ box-shadow:0 10px 30px rgba(147,197,253,.28) }
+  .grid.three .card{ grid-column:span 12 }
+  @media (min-width:680px){ .grid.three .card{ grid-column:span 6 } }
+  @media (min-width:980px){ .grid.three .card{ grid-column:span 4 } }
+html[data-theme="dark"] .to-top{ background:rgba(255,255,255,.18); box-shadow:0 10px 24px rgba(0,0,0,.45) }
+/* v2.20 legend spacing */
+.modal .legend-tags, .modal .legend-status{
+  display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+}
+.modal .legend-status .status{ margin-right:0 } /* gap handles spacing */
+/* v2.21 legend list */
+.modal .legend-list{ list-style:none; padding:0; margin:10px 0 0 0 }
+.modal .legend-list li{ display:flex; align-items:center; gap:10px; margin:6px 0 }
+.modal .legend-list .status{ flex:0 0 auto }
+/* v2.23 legend recode */
+.modal .status-list{ list-style:none; padding:0; margin:12px 0 0 0; display:grid; grid-template-columns:1fr; gap:10px }
+.modal .status-item{ display:grid; grid-template-columns:auto 1fr; column-gap:10px; row-gap:2px; align-items:center }
+.modal .status-item .status{ grid-column:1; grid-row:1 / span 2 }
+.modal .status-item .name{ grid-column:2; grid-row:1; font-weight:600 }
+.modal .status-item .desc{ grid-column:2; grid-row:2; color:var(--muted) }
+</style>
+<style>
+</style>
+<style>
+/* === Dark Mode refinements (v2.32) === */
+html[data-theme="dark"]{
+  --bg:#0B0E14;
+  --card:#0F141E;
+  --text:#E6E6EB;
+  --muted:#B1B6C2;
+  --border:#1E2636;
+  --primary:#8AB3FF;
+  --primary-dark:#5B8CFF;
+  --shadow:0 10px 28px rgba(0,0,0,.45);
+  --link:#8AB3FF;
+  --link-strong:#BFD1FF;
+}
+/* Header / Nav */
+html[data-theme="dark"] header{
+  background:linear-gradient(180deg, rgba(16,22,36,.92), rgba(11,14,20,.70));
+  border-bottom:1px solid var(--border);
+}
+html[data-theme="dark"] .menu-btn{ background:#121826; border:1px solid var(--border) }
+/* Inputs / Search */
+html[data-theme="dark"] input[type="text"],
+html[data-theme="dark"] input[type="search"],
+html[data-theme="dark"] .search-bar,
+html[data-theme="dark"] .search{
+  background:#0F141E;
+  border:1px solid var(--border);
+  color:var(--text);
+}
+html[data-theme="dark"] ::placeholder{ color:#9AA3B2 }
+/* Cards */
+html[data-theme="dark"] .card{ background:var(--card); border-color:var(--border); box-shadow:0 10px 30px rgba(0,0,0,.35) }
+/* Buttons */
+html[data-theme="dark"] .btn{ background:#121826; border:1px solid var(--border); color:var(--text) }
+html[data-theme="dark"] .btn.primary{ background:var(--primary); color:#0B0E14; border:0 }
+/* Modals */
+html[data-theme="dark"] .modal{ background:var(--card); border:1px solid var(--border); color:var(--text) }
+/* Footer QR-Block */
+html[data-theme="dark"] .qr-in-footer{ background:#0F141E; border:1px solid var(--border) }
+/* Chips (Variante A) */
+html[data-theme="dark"] .subject-nav .chip{
+  background:#0F141E !important;
+  border-color:var(--chip-color,var(--border)) !important;
+  color:var(--text) !important;
+  box-shadow:0 1px 0 rgba(0,0,0,.4);
+}
+html[data-theme="dark"] .subject-nav .chip.active{ background:rgba(139,92,246,.15) !important }
+/* Scroll-to-top & Feedback */
+html[data-theme="dark"] #scrollUpBtn,
+html[data-theme="dark"] .to-top{ background:#1F2937; color:#fff }
+html[data-theme="dark"] .feedback-btn{ background:#0F141E; border:1px solid var(--border); color:var(--link-strong) }
+</style>
+<style>
+/* === Dark Mode: deep navy + beige accents (v2.33) === */
+html[data-theme="dark"]{
+  /* Deep navy (nicht schwarz) */
+  --bg:#0E121A;
+  --card:#121826;
+  --text:#E9E9EE;
+  --muted:#B5BBC9;
+  --border:#1E2636;
+  --shadow:0 10px 28px rgba(0,0,0,.42);
+
+  /* Beige Akzente */
+  --accent:#E6D5B8;          /* Hauptbeige */
+  --accent-strong:#D9C29A;   /* stärker für Linien/Outlines */
+  --accent-soft:rgba(230,213,184,.25); /* zarte Fills */
+
+  /* Links/Primary in Dark neutralisiert in Richtung Beige */
+  --primary:var(--accent);
+  --primary-dark:#CDAF85;
+  --link:var(--accent);
+  --link-strong:#F0E4CD;
+}
+
+/* Header / Nav */
+html[data-theme="dark"] header{
+  background:linear-gradient(180deg, rgba(18,24,38,.95), rgba(14,18,26,.78));
+  border-bottom:1px solid var(--border);
+}
+html[data-theme="dark"] header .nav a.active{
+  border-bottom-color: var(--accent-strong);
+}
+
+/* Infoboxen / Cards mit zartem beige Akzent */
+html[data-theme="dark"] .card{ background:var(--card); border-color:var(--border); box-shadow:0 10px 28px rgba(0,0,0,.38) }
+html[data-theme="dark"] .card--blue::before,
+html[data-theme="dark"] .card--brown::before,
+html[data-theme="dark"] .card--physik::before,
+html[data-theme="dark"] .card--erdkunde::before,
+html[data-theme="dark"] .card--geschichte::before{
+  background: var(--accent-strong) !important;
+  opacity:.9;
+}
+
+/* Buttons */
+html[data-theme="dark"] .btn{ background:#141B2A; border:1px solid var(--border); color:var(--text) }
+html[data-theme="dark"] .btn.primary{ background:var(--accent); color:#0E121A; border:0 }
+html[data-theme="dark"] .cta-button{ background:var(--accent); color:#0E121A; border:0 }
+
+/* Suche / Inputs */
+html[data-theme="dark"] input[type="text"],
+html[data-theme="dark"] input[type="search"],
+html[data-theme="dark"] .search-bar,
+html[data-theme="dark"] .search{
+  background:#121826;
+  border:1px solid var(--border);
+  color:var(--text);
+}
+html[data-theme="dark"] ::placeholder{ color:#9FA8BA }
+
+/* Modals */
+html[data-theme="dark"] .modal{ background:var(--card); border:1px solid var(--border); color:var(--text) }
+html[data-theme="dark"] .modal .modal-header{ border-bottom:1px solid var(--border) }
+
+/* Chips (Variante A) – Outline in Beige nur für neutrale Bereiche; Fachfarben bleiben */
+html[data-theme="dark"] .subject-nav .chip{
+  background:#121826 !important;
+  color:var(--text) !important;
+  box-shadow:0 1px 0 rgba(0,0,0,.38);
+}
+html[data-theme="dark"] .subject-nav .chip.active{ background:var(--accent-soft) !important; outline:2px solid var(--accent-strong) !important }
+html[data-theme="dark"] .subject-nav .chip:hover{ box-shadow:0 10px 22px rgba(0,0,0,.32) }
+
+/* Footer QR-Block */
+html[data-theme="dark"] .qr-in-footer{ background:#121826; border:1px solid var(--border) }
+
+/* Scroll-to-top & Feedback */
+html[data-theme="dark"] .to-top{ background:#1C2436; color:#fff }
+html[data-theme="dark"] .feedback-btn{ background:#121826; border:1px solid var(--border); color:var(--link-strong) }
+</style>
+<style>
+/* === Dark Mode Palette (v2.34) === */
+html[data-theme="dark"] {
+  --bg: #222831;
+  --card: #393E46;
+  --text: #F5F5F5;
+  --muted: #948979;
+  --border: #948979;
+  --accent: #DFD0B8;
+  --accent-strong: #DFD0B8;
+  --accent-soft: rgba(223,208,184,.15);
+  --primary: #DFD0B8;
+  --primary-dark: #948979;
+  --link: #DFD0B8;
+  --link-strong: #FFF5E1;
+}
+
+/* Backgrounds */
+html[data-theme="dark"] body { background: var(--bg); color: var(--text); }
+html[data-theme="dark"] header { background: var(--card); border-bottom: 1px solid var(--border); }
+html[data-theme="dark"] footer { background: var(--card); border-top: 1px solid var(--border); }
+
+/* Cards / Info-Boxen */
+html[data-theme="dark"] .card { background: var(--card); border: 1px solid var(--border); color: var(--text); }
+html[data-theme="dark"] .info-box { background: var(--card); border-left: 4px solid var(--accent-strong); }
+
+/* Inputs / Search */
+html[data-theme="dark"] input[type="text"],
+html[data-theme="dark"] input[type="search"],
+html[data-theme="dark"] .search-bar,
+html[data-theme="dark"] .search {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+html[data-theme="dark"] ::placeholder { color: var(--muted); }
+
+/* Buttons */
+html[data-theme="dark"] .btn { background: var(--card); border: 1px solid var(--border); color: var(--text); }
+html[data-theme="dark"] .btn.primary { background: var(--accent); color: #222831; border: 0; }
+html[data-theme="dark"] .cta-button { background: var(--accent); color: #222831; border: 0; }
+
+/* Chips (Variante A) */
+html[data-theme="dark"] .subject-nav .chip {
+  background: var(--card) !important;
+  border-color: var(--chip-color,var(--border)) !important;
+  color: var(--text) !important;
+  box-shadow: 0 1px 0 rgba(0,0,0,.3);
+}
+html[data-theme="dark"] .subject-nav .chip.active {
+  background: var(--accent-soft) !important;
+  outline: 2px solid var(--accent-strong) !important;
+}
+html[data-theme="dark"] .subject-nav .chip:hover { box-shadow: 0 8px 18px rgba(0,0,0,.35); }
+
+/* Scroll-to-top & Feedback */
+html[data-theme="dark"] .to-top { background: var(--card); color: var(--text); border: 1px solid var(--border); }
+html[data-theme="dark"] .feedback-btn { background: var(--card); border: 1px solid var(--border); color: var(--link-strong); }
+</style>
+<style>
+/* v2.35 Dark Mode: Haupttitel in Anthrazit */
+html[data-theme="dark"] h1.site-title {
+  color: #393E46;
+  font-weight: 700;
+  text-shadow: 0 1px 4px rgba(0,0,0,.7);
+}
+</style>
+<style>
+/* v2.39 Changelog styling */
+.changelog-list { list-style:none; margin:0; padding:0; }
+.changelog-list li { margin:4px 0; }
+.changelog-list .version { font-weight:600; }
+.changelog-list .date { color:#9ca3af; }
+.changelog-list li.feature { color:#22c55e; } /* Grün */
+.changelog-list li.bugfix  { color:#6b7280; } /* Grau */
+.changelog-list li.design  { color:#3b82f6; } /* Blau */
+</style>
+<style>
+/* v2.41a: Dark title fix + changelog styles + feedback links */
+html[data-theme="dark"] h1.site-title,
+html[data-theme="dark"] .title-anthrazit { color:#393E46 !important; }
+
+/* Changelog ULs unified look & colors */
+#modalChangelog ul { list-style:none; margin:0; padding:0; }
+#modalChangelog li { margin:4px 0; color:#6b7280; } /* default grey */
+#modalChangelog li .version { font-weight:600; }
+#modalChangelog li .date { color:#9ca3af; }
+#modalChangelog li.feature { color:#22c55e; }  /* Grün */
+#modalChangelog li.design  { color:#3b82f6; }  /* Blau */
+#modalChangelog li.bugfix  { color:#6b7280; }  /* Grau */
+
+/* Feedback card links in blue */
+.feedback-card a { color:#3b82f6 !important; font-weight:600; }
+html[data-theme="dark"] .feedback-card a { color:#60a5fa !important; }
+</style>
+<style>
+/* v2.42 Changelog color coding */
+#modalChangelog .changelog-list { list-style:none; margin:0; padding:0; }
+#modalChangelog .changelog-list li { margin:4px 0; }
+#modalChangelog .changelog-list .version { font-weight:600; }
+#modalChangelog .changelog-list .date { color:#9ca3af; }
+#modalChangelog .changelog-list li.feature { color:#22c55e; }  /* Grün */
+#modalChangelog .changelog-list li.bugfix  { color:#6b7280; }  /* Grau */
+#modalChangelog .changelog-list li.design  { color:#3b82f6; }  /* Blau */
+</style>
+<style>
+          /* Clean, unified dropdown buttons */
+          .dropdown{ position:absolute; top:72px; right:20px; background:var(--card); border:1px solid var(--border); border-radius:14px; box-shadow:var(--shadow); min-width:280px; display:none; z-index:70; overflow:hidden; padding:10px }
+          .dropdown.open{ display:block }
+          .menu-stack{ display:flex; flex-direction:column; gap:8px }
+          .btn{ display:inline-flex; align-items:center; gap:8px; padding:10px 12px; border-radius:12px; border:1px solid var(--border); background:var(--card); cursor:pointer; text-decoration:none; color:var(--text); font-weight:600; justify-content:space-between }
+          .btn-menu{ width:100% }
+          .btn:hover{ box-shadow:0 4px 14px rgba(2,6,23,.10) }
+          html[data-theme="dark"] .btn:hover{ box-shadow:0 6px 20px rgba(0,0,0,.35) }
+        </style>
+</head>
+<body>
+
+  
+  <header>
+    <div class="wrap">
+      <div class="left">
+        <a class="brand" href="index.html">oberstufe.site</a>
+      </div>
+      <nav class="nav">
+        <a href="index.html" data-i18n="nav_home" class="active">Home</a>
+        <a href="powerpoints.html" data-i18n="nav_pp" class="">PowerPoints</a>
+        <a href="videos.html" data-i18n="nav_videos" class="">Videos</a>
+      </nav>
+      <div class="right"><button class="menu-btn" id="menuBtn" aria-haspopup="true" aria-expanded="false" aria-label="Menü">
+          <span class="menu-icon" aria-hidden="true"><span class="bar"></span><span class="bar"></span><span class="bar"></span></span>
+        </button><div class="dropdown" id="menuList" role="menu" aria-label="Menü">
+  <div class="menu-stack">
+    <a href="javascript:void(0)" class="btn btn-menu" data-modal="modalSettings">Einstellungen</a>
+    <a href="javascript:void(0)" class="btn btn-menu" data-modal="modalChangelog">Changelog</a>
+    <a href="javascript:void(0)" class="btn btn-menu" data-modal="modalLegend">Legende</a>
+    <a href="javascript:void(0)" class="btn btn-menu" data-modal="modalContact">Kontakt</a>
+    <a href="/admin" target="_blank" rel="noopener" class="btn btn-menu">Admin&nbsp;Login</a>
+  </div>
+</div></div></div></div></div>
+      </div>
+    </div>
+  </header>
+
+
+
+  <main class="container">
+    <section class="hero"><h1 data-i18n="add_title">Wie kann ich selbst ein Projekt hinzufügen?</h1><p data-i18n="add_sub">Es gibt verschiedene Möglichkeiten, dein Projekt bei uns einzubringen.</p></section>
+
+    <section class="grid three">
+      <article class="card card--plain card--soft"><h3 data-i18n="add_card1_h">Ansprechen in der Schule</h3><p data-i18n="add_card1_p">Sprich uns einfach in der Schule an – wir schauen gemeinsam, wie wir dein Projekt einbinden können.</p></article>
+      <article class="card card--plain card--soft"><h3 data-i18n="add_card2_h">E-Mail schreiben</h3><p data-i18n="add_card2_p">Schick uns eine E-Mail mit deiner Idee – wir gucken dann, was wir tun können.</p><p class="project-note"><a href="mailto:oberstufesite@gmail.com" style="color:var(--link); font-weight:600;">oberstufesite@gmail.com</a></p></article>
+      <article class="card card--plain card--soft"><h3 data-i18n="add_card3_h">Feedback-Formular</h3><p data-i18n="add_card3_p">Nutze unser Formular, wenn du uns Details schicken möchtest.</p><p class="project-note"><a href="https://docs.google.com/forms/d/e/1FAIpQLSc7hitAkvgDHXnOKgRpvolibMhm3iHeag_V-Azm4Mz8zef63w/viewform?usp=dialog" target="_blank" rel="noopener" style="color:var(--link); font-weight:600;">Zum Formular</a> – wähle <strong>„Sonstiges“</strong> und gib deinen <strong>Namen</strong> an.</p></article>
+    </section>
+
+    <section class="info"><h3 data-i18n="add_why_h">Warum mitmachen?</h3><p data-i18n="add_why_p">Du machst dein Projekt für jeden frei zugänglich – immer und jederzeit. Dabei sammelst du wertvolle Erfahrungen in Webentwicklung und Präsentation und kannst die Website auch nutzen, um eigene Projekte vorzustellen. Gleichzeitig trägst du dazu bei, unsere Sammlung stetig zu erweitern.</p></section>
+
+    <a class="ghost" href="index.html" style="display:inline-block; margin-top:12px; color:var(--link);" data-i18n="back_home">← Zurück zur Startseite</a>
+  </main>
+
+
+  <footer>
+    <div class="container footer-inner">
+      <a class="cta-button" href="add-website.html" data-i18n="cta_add">Projekt hinzufügen</a>
+      <div class="footer-meta">© 2025 oberstufe.site – v2.38a</div>
+      <div class="qr-in-footer" id="qrBlock" title="QR-Code">
+        <div class="share-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l5-5 5 5"/><path d="M12 12v2.38a"/></svg>
+          <span data-i18n="share_site">Teile diese Website!</span>
+        </div>
+        <img src="qr-placeholder.jpg" alt="QR-Code">
+      </div>
+    </div>
+  </footer>
+
+  <div id="overlayGlobal" class="overlay-backdrop"></div>
+
+  <div id="modalSettings" class="modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <div class="modal-header">
+      <h3 id="settingsTitle" data-i18n="settings_title">Einstellungen</h3>
+      <button id="closeSettings" class="btn">Schließen</button>
+    </div>
+    <div class="modal-body">
+      <div class="row-setting">
+        <span data-i18n="set_theme">Theme</span>
+        <div class="icon-toggle" role="group" aria-label="Theme">
+          <button id="themeLight" class="icon-btn" title="Hell" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+          </button>
+          <button id="themeDark" class="icon-btn" title="Dunkel" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="row-setting">
+        <span data-i18n="set_lang">Sprache</span>
+        <div>
+          <button id="langDe" class="btn" style="margin-right:6px;">DE</button>
+          <button id="langEn" class="btn">EN</button>
+        </div>
+      </div>
+      </div>
+      
+      
+    </div>
+  </div>
+
+  <div id="modalChangelog" class="modal" role="dialog" aria-modal="true" aria-labelledby="changelogTitle">
+    <div class="modal-header"><h3 id="changelogTitle">Changelog</h3><button id="closeChangelog" class="btn">Schließen</button>
+<ul><li>v2.14 – Navigation verbessert, Menü überarbeitet (21.09.2025)</li><li>v2.15 – Darkmode eingeführt (21.09.2025)</li><li>v2.16 – Footer überarbeitet (21.09.2025)</li><li>v2.17 – Scroll-Up Button eingefügt (21.09.2025)</li><li>v2.18 – Header/Navi Bugfixes (21.09.2025)</li><li>v2.19 – Design-Optimierungen, Animationen (21.09.2025)</li><li>v2.20 – Farbpalette angepasst (21.09.2025)</li><li>v2.21 – Changelog hinzugefügt (21.09.2025)</li><li>v2.22 – Kleine Layout-Fixes (21.09.2025)</li><li>v2.23 – Neue Version bereitgestellt (21.09.2025)</li><li>v2.24 – Bugfix Scroll-Up Button (21.09.2025)</li><li>v2.25 – Feedback Button hinzugefügt (21.09.2025)</li><li>v2.26 – Korrektur Scroll-Button Verhalten (21.09.2025)</li><li>v2.27 – Chips Design begonnen (21.09.2025)</li><li>v2.28 – Chips farbig (erste Version) (21.09.2025)</li><li>v2.29 – Chips Bugfix (korrekte Farben) (21.09.2025)</li><li>v2.30 – Chips Variante A umgesetzt (21.09.2025)</li><li>v2.31 – Chips Farben in allen Fächern gefixt (21.09.2025)</li><li>v2.32 – Dark Mode Kontrast & Elemente verbessert (21.09.2025)</li><li>v2.33 – Dark Mode Navy + Beige Akzente (21.09.2025)</li><li>v2.34 – Dark Mode Palette #222831/#393E46/#948979/#DFD0B8 (21.09.2025)</li><li>v2.35 – Dark Mode: Titel Anthrazit (21.09.2025)</li><li>v2.36 – Interne Robustheit verbessert (21.09.2025)</li><li>v2.37 – Listener/JS-Struktur bereinigt (21.09.2025)</li><li>v2.38 – Finales Update vor 2.38a Release (21.09.2025)</li></ul>
+</div>
+    <div class="modal-body">
+      <ul style="list-style:none; padding:0; margin:0;">
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#2563EB;">v1.0 – 18.09.2025</span> · Erste Veröffentlichung der Homepage</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#22C55E;">Erweiterungen – 18.09.2025</span> · Philexikon & Pieter Bruegel integriert</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#2563EB;">v2.0 – 18.09.2025</span> · Überarbeitetes Design</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#2563EB;">v2.1 – 18.09.2025</span> · Feinschliff</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#2563EB;">v2.2 – 19.09.2025</span> · Wiener Kongress, Suche & Tags</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#2563EB;">v2.4 – 20.09.2025</span> · QR im Footer, CTA, Design-Fixes</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#6B7280;">v2.6 – 20.09.2025</span> · Farben wie 12.4, FAQ-Akzente, Menü-Align Fix</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#22C55E;">v2.7 – 20.09.2025</span> · PowerPoints & Videos, Share-Hinweis, Header-Navigation</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#22C55E;">v2.7e – 20.09.2025</span> · Komplettpaket (alle Unterseiten), PPT-Downloads vorbereitet</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#2563EB;">v2.8 – 20.09.2025</span> · Fächer-Abschnitte (PP), DE/EN, QR-Option, „Unsere Websites“</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#22C55E;">v2.8a – 20.09.2025</span> · PP-Chips als Tags, Add-Seite 3 Spalten</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#6B7280;">v2.8b – 20.09.2025</span> · Bugfix: getrennte Seiten, saubere Header/Footer</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#6B7280;">v2.8c – 20.09.2025</span> · Bugfix: kein Zusammenkleben der Seiten</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#6B7280;">v2.8d – 20.09.2025</span> · Einstellungen repariert, Chips hübscher, CTA auf Add-Seite ausgeblendet</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#2563EB;">v2.9 – 20.09.2025</span> · Changelog-Overlay, Dark Mode verbessert, Chips Variante A, Legende & Sprache gefixt</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#2563EB;">v2.10 – 20.09.2025</span> · Hamburger-Icon (3 Striche) & Bugfixes; neue Fachfarben</li>
+        <li style="margin:10px 0;"><span style="font-weight:800; color:#2563EB;">v2.11 – 20.09.2025</span> · Menü-Overlays (Kontakt/Changelog/Legende/Einstellungen), Theme-Switch mit SVG-Sonne/Mond, vollständige DE/EN, Fachfarben fix</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="modalLegend" class="modal" role="dialog" aria-modal="true" aria-labelledby="legendTitle">
+    <div class="modal-header"><h3 id="legendTitle">Legende</h3><button id="closeLegend" class="btn">Schließen</button></div>
+    <div class="modal-body">
+      <h4 style="margin:10px 0 6px">Tags</h4>
+      <p>Farbige Schlagworte geben die Fachbereiche an:</p>
+      <div class="legend-tags">
+<span class="tag chemie">Chemie</span>
+        <span class="tag deutsch">Deutsch</span>
+        <span class="tag erdkunde">Erdkunde</span>
+        <span class="tag geschichte">Geschichte</span>
+        <span class="tag informatik">Informatik</span>
+        <span class="tag kunst">Kunst</span>
+        <span class="tag mathe">Mathe</span>
+        <span class="tag physik">Physik</span>
+        <span class="tag philosophie">Philosophie</span>
+        <span class="tag sowi">SoWi</span>
+        <span class="tag sport">Sport</span>
+</div>
+
+      <h4 style="margin:16px 0 6px">Status‑Badges</h4>
+      <p>Zeigen den aktuellen Stand eines Projekts:</p>
+      <div class="legend-status">
+        <span class="status green">Fertig</span>
+        <span class="status yellow">In Arbeit</span>
+        <span class="status red">Test</span>
+        <span class="status blue">Coming&nbsp;Soon</span>
+</div>
+      <ul class="legend-list">
+  <ul class="status-list">
+    <li class="status-item"><span class="status green">Fertig</span><span class="name">Fertig</span><span class="desc">Projekt/Präsentation ist abgeschlossen.</span></li>
+    <li class="status-item"><span class="status yellow">In Arbeit</span><span class="name">In Arbeit</span><span class="desc">Inhalte werden noch erstellt oder überarbeitet.</span></li>
+    <li class="status-item"><span class="status red">Test</span><span class="name">Test</span><span class="desc">Entwurf oder Beta; kann Fehler enthalten.</span></li>
+    <li class="status-item"><span class="status blue">Coming Soon</span><span class="name">Coming Soon</span><span class="desc">Geplant, aber noch nicht veröffentlicht.</span></li>
+  </ul>
+</ul>
+
+    </div>
+    </div>
+  </div>
+
+  <div id="modalContact" class="modal" role="dialog" aria-modal="true" aria-labelledby="contactTitle">
+    <div class="modal-header"><h3 id="contactTitle" data-i18n="contact_title">Kontakt</h3><button id="closeContact" class="btn">Schließen</button></div>
+    <div class="modal-body">
+      <p><strong>E-Mail:</strong> <a href="mailto:oberstufesite@gmail.com" class="link">oberstufesite@gmail.com</a></p>
+      <p><a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLSc7hitAkvgDHXnOKgRpvolibMhm3iHeag_V-Azm4Mz8zef63w/viewform?usp=dialog" target="_blank" rel="noopener" data-i18n="contact_form">Zum Feedback-Formular</a></p>
+    </div>
+  </div>
+
+  <a class="feedback-btn" id="feedbackBtn" href="https://docs.google.com/forms/d/e/1FAIpQLSc7hitAkvgDHXnOKgRpvolibMhm3iHeag_V-Azm4Mz8zef63w/viewform?usp=dialog" target="_blank" rel="noopener" data-i18n="feedback">Feedback</a>
+  <button class="to-top" id="toTopBtn" aria-label="Nach oben scrollen" title="Nach oben"><svg viewBox="0 0 48 48" width="22" height="22" aria-hidden="true"><circle cx="24" cy="24" r="17" fill="none" stroke="rgba(255,255,255,.65)" stroke-width="2"/><path d="M16 26l8-8 8 8" fill="none" stroke="#2563EB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+
+<script>
+  (function(){try{const s=localStorage.getItem('theme'); if(s==='dark'||(!s&&window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.setAttribute('data-theme','dark');}else{document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();
+
+  const menuBtn=document.getElementById('menuBtn'); const menuList=document.getElementById('menuList');
+  function closeMenu(){ menuList.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); }
+  menuBtn && menuBtn.addEventListener('click', (e)=>{ e.stopPropagation(); const open=menuList.classList.toggle('open'); menuBtn.classList.toggle('open', open); menuBtn.setAttribute('aria-expanded', open?'true':'false'); });
+  document.addEventListener('click', (e)=>{ if(menuList && !menuList.contains(e.target) && e.target!==menuBtn){ closeMenu(); } });
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ closeMenu(); } });
+
+  const swTheme = document.getElementById('switchTheme');
+  const swQr = document.getElementById('switchQr');
+  const langDe = document.getElementById('langDe');
+  const langEn = document.getElementById('langEn');
+  const densComfort = document.getElementById('densComfort');
+  const densCompact = document.getElementById('densCompact');
+  const qrBlock = document.getElementById('qrBlock');
+
+  (function initSettings(){
+    const lang = localStorage.getItem('lang') || 'de';
+    const density = localStorage.getItem('density') || 'comfort';
+    const qr = localStorage.getItem('qr') || 'on';
+    const theme = localStorage.getItem('theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light');
+
+    document.documentElement.setAttribute('data-theme', theme);
+    if(swTheme && theme==='dark') swTheme.classList.add('on');
+
+    document.documentElement.setAttribute('data-density', density==='compact' ? 'compact' : 'comfort');
+    if(density==='compact'){ densCompact && densCompact.classList.add('primary'); } else { densComfort && densComfort.classList.add('primary'); }
+
+    if(swQr && qr==='on'){ swQr.classList.add('on'); }
+    qrBlock && (qrBlock.style.display = (qr==='off' ? 'none' : 'flex'));
+
+    applyI18N(lang);
+  })();
+
+  swTheme && swTheme.addEventListener('click', ()=>{
+    const now = document.documentElement.getAttribute('data-theme');
+    const next = (now==='dark') ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    swTheme.classList.toggle('on');
+  });
+
+  swQr && swQr.addEventListener('click', ()=>{
+    const isOn = swQr.classList.toggle('on');
+    localStorage.setItem('qr', isOn ? 'on' : 'off');
+    if(qrBlock) qrBlock.style.display = isOn ? 'flex' : 'none';
+  });=>{ localStorage.setItem('lang','de'); applyI18N('de'); });=>{ localStorage.setItem('lang','en'); applyI18N('en'); });
+
+  densComfort && densComfort.addEventListener('click', ()=>{ document.documentElement.setAttribute('data-density','comfort'); localStorage.setItem('density','comfort'); });
+  densCompact && densCompact.addEventListener('click', ()=>{ document.documentElement.setAttribute('data-density','compact'); localStorage.setItem('density','compact'); });
+
+  const openChangelog = document.getElementById('openChangelog');
+  const openSettings = document.getElementById('openSettings');
+  const overlayGlobal = document.getElementById('overlayGlobal');
+  const modalSettings = document.getElementById('modalSettings');
+  const closeSettings = document.getElementById('closeSettings');
+  const themeLight = document.getElementById('themeLight');
+  const themeDark = document.getElementById('themeDark');
+  const openContact = document.getElementById('openContact');
+  const closeContact = document.getElementById('closeContact');
+  openChangelog && openChangelog.addEventListener('click', ()=>{
+    // removed legacy alert, use overlay
+      'Changelog:',
+      'v1.0 – 18.09.2025 – Erste Veröffentlichung der Homepage',
+      'Erweiterungen – 18.09.2025 – Philexikon & Pieter Bruegel',
+      'v2.0 – 18.09.2025 – Überarbeitetes Design',
+      'v2.1 – 18.09.2025 – Feinschliff',
+      'v2.2 – 19.09.2025 – Wiener Kongress, Suche & Tags',
+      'v2.4 – 20.09.2025 – QR im Footer, CTA, Design-Fixes',
+      'v2.6 – 20.09.2025 – Farben wie 12.4, FAQ Akzente, Menü-Align fix',
+      'v2.7 – 20.09.2025 – PowerPoints & Videos, Share-Hinweis, Header-Navigation',
+      'v2.7e – 20.09.2025 – Komplettpaket (alle Unterseiten), PPT-Downloads vorbereitet',
+      'v2.8 – 20.09.2025 – Fächer-Abschnitte (PP), DE/EN, Dichte & QR-Option, „Unsere Websites“',
+      'v2.8a – 20.09.2025 – PP-Chips als Tags, Add-Seite 3 Spalten',
+      'v2.8b – 20.09.2025 – Bugfix: getrennte Seiten, saubere Header/Footer',
+      'v2.8c – 20.09.2025 – Bugfix: kein Zusammenkleben der Seiten, sichere JS-Einbettung'
+    ].join('\n'));
+  });
+
+  
+  // Open Settings modal
+  function openModal(m){ if(overlayGlobal && m){ overlayGlobal.style.display='block'; m.style.display='block'; } }
+  function closeModal(m){ if(overlayGlobal && m){ overlayGlobal.style.display='none'; m.style.display='none'; } }
+
+  openSettings && openSettings.addEventListener('click', ()=>{ openModal(modalSettings); closeMenu(); });
+  closeSettings && closeSettings.addEventListener('click', ()=> closeModal(modalSettings));
+
+  // Contact
+  const modalContact = document.getElementById('modalContact');
+  openContact && openContact.addEventListener('click', ()=> openModal(modalContact));
+  closeContact && closeContact.addEventListener('click', ()=> closeModal(modalContact));
+
+  // Legend
+  const modalLegend = document.getElementById('modalLegend');
+  const closeLegend = document.getElementById('closeLegend');
+  const legendBtn = document.getElementById('openLegend');
+  legendBtn && legendBtn.addEventListener('click', ()=> openModal(modalLegend));
+  closeLegend && closeLegend.addEventListener('click', ()=> closeModal(modalLegend));
+
+  // Changelog
+  const modalChangelog = document.getElementById('modalChangelog');
+  const closeChangelog = document.getElementById('closeChangelog');
+  openChangelog && openChangelog.addEventListener('click', ()=> openModal(modalChangelog));
+  closeChangelog && closeChangelog.addEventListener('click', ()=> closeModal(modalChangelog));
+
+  overlayGlobal && overlayGlobal.addEventListener('click', ()=> {
+    [modalSettings, modalContact, modalLegend, modalChangelog].forEach(m => { if(m) m.style.display='none'; });
+    overlayGlobal.style.display='none';
+  });
+
+  // Theme with icons
+  function setTheme(next){
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('theme', next); }catch(e){}
+    themeLight && themeLight.classList.toggle('active', next==='light');
+    themeDark && themeDark.classList.toggle('active', next==='dark');
+  }
+  themeLight && themeLight.addEventListener('click', ()=> setTheme('light'));
+  themeDark && themeDark.addEventListener('click', ()=> setTheme('dark'));
+
+  // QR toggle
+  const switchQr = document.getElementById('switchQr'); const qrBlock = document.getElementById('qrBlock');
+  function setQr(state){ try{localStorage.setItem('qr',state);}catch(e){}; if(switchQr){ switchQr.classList.toggle('on', state==='on'); } if(qrBlock){ qrBlock.style.display = (state==='on'?'flex':'none'); } }
+  switchQr && switchQr.addEventListener('click', ()=>{ const isOn=!switchQr.classList.contains('on'); setQr(isOn?'on':'off'); });
+
+  // Language
+  
+function applyI18N(lang){
+  try{ localStorage.setItem('lang', lang); }catch(e){}
+  const dictDe = (window.I18N && I18N.de) || {};
+  const dictLang = (window.I18N && I18N[lang]) || {};
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const val = (dictLang[key] !== undefined) ? dictLang[key] : (dictDe[key] !== undefined ? dictDe[key] : el.innerHTML);
+    el.innerHTML = val;
+  });
+  const si = document.getElementById('searchInput');
+  if(si){ si.setAttribute('placeholder', lang==='en' ? 'Search… (topics or tags)' : 'Suche nach Themen oder Tags … (z. B. Kunst, Philosophie, Geschichte)'); }
+}
+);
+    const si = document.getElementById('searchInput');
+    if(si){ si.setAttribute('placeholder', lang==='en' ? 'Search topics or tags… (e.g., art, philosophy, history)' : 'Suche nach Themen oder Tags … (z. B. Kunst, Philosophie, Geschichte)'); }
+  }
+  const langDeBtn = document.getElementById('langDe'); const langEnBtn = document.getElementById('langEn');
+  langDeBtn && langDeBtn.addEventListener('click', ()=> applyI18N('de'));
+  langEnBtn && langEnBtn.addEventListener('click', ()=> applyI18N('en'));
+
+  // Init from storage
+  (function initFromStorage(){
+    const theme = localStorage.getItem('theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const lang = localStorage.getItem('lang') || 'de';
+    const qr = localStorage.getItem('qr') || 'on';
+    setTheme(theme);
+    setQr(qr);
+    applyI18N(lang);
+  })();
+
+  
+  const overlayGlobal=document.getElementById('overlayGlobal');
+  const modalSettings=document.getElementById('modalSettings');
+  const modalChangelog=document.getElementById('modalChangelog');
+  const modalLegend=document.getElementById('modalLegend');
+  const modalContact=document.getElementById('modalContact');
+  function openModal(m){ if(overlayGlobal&&m){ overlayGlobal.style.display='block'; m.style.display='block'; } }
+  function closeModal(m){ if(overlayGlobal&&m){ overlayGlobal.style.display='none'; m.style.display='none'; } }
+  const btnSet=document.getElementById('menuOpenSettings');
+  const btnChg=document.getElementById('menuOpenChangelog');
+  const btnLeg=document.getElementById('menuOpenLegend');
+  const btnCon=document.getElementById('menuOpenContact');
+  btnSet && btnSet.addEventListener('click', ()=>{ openModal(modalSettings); closeMenu(); });
+  btnChg && btnChg.addEventListener('click', ()=>{ openModal(modalChangelog); closeMenu(); });
+  btnLeg && btnLeg.addEventListener('click', ()=>{ openModal(modalLegend); closeMenu(); });
+  btnCon && btnCon.addEventListener('click', ()=>{ openModal(modalContact); closeMenu(); });
+
+  const I18N = {
+    de: {
+      nav_home: "Home", nav_pp: "PowerPoints", nav_vid: "Videos",
+      set_theme: "Theme", set_lang: "Sprache", set_density: "Darstellungsdichte", set_qr: "QR im Footer",
+      density_comfort: "Komfortabel", density_compact: "Kompakt",
+      open_changelog: "Changelog", open_contact: "Kontakt",
+      share_site: "Teile diese Website!", feedback: "Feedback",
+      hero_home_title: "Willkommen auf oberstufe.site",
+      hero_home_sub: "Die zentrale Startseite unserer Projekte",
+      grid_title: "Unsere Websites",
+      sort_label: "Sortieren:", sort_std: "Standard", sort_az: "A–Z", sort_za: "Z–A", sort_rnd: "Zufällig",
+      more_coming: "More coming soon",
+      about_title: "Über dieses Projekt",
+      about_1: "Dieses Projekt entstand im Rahmen unserer schulischen Arbeiten. Wir experimentieren mit künstlicher Intelligenz, entwickeln Präsentationen und erstellen Websites, die wir hier auf oberstufe.site veröffentlichen.",
+      about_2: "Unsere Seiten werden mit Hilfe von <a class=\"link\" href=\"https://www.netlify.com/\" target=\"_blank\" rel=\"noopener\">Netlify</a> gehostet, während die Domain über <a class=\"link\" href=\"https://www.squarespace.com/\" target=\"_blank\" rel=\"noopener\">Squarespace</a> verwaltet wird.",
+      about_3: "Bitte beachten Sie: Die Websites sind noch nicht vollendet. Inhalte und Gestaltung können sich jederzeit ändern.",
+      about_4: "Bei Fragen oder Ideen können Sie uns gerne unter <a class=\"mail\" href=\"mailto:oberstufesite@gmail.com\">oberstufesite@gmail.com</a> erreichen.",
+      improv_title: "Geplante Verbesserungen",
+      faq_title: "FAQ",
+      faq_q1: "Was ist oberstufe.site?", faq_a1: "oberstufe.site ist unsere zentrale Startseite, die alle Schülerprojekte bündelt.",
+      faq_q2: "Warum gibt es mehrere Websites?", faq_a2: "Jedes Projekt hat ein eigenes Thema (z. B. <span class='kw-philosophie'>Philosophie</span>, <span class='kw-kunst'>Kunst</span>, <span class='kw-geschichte'>Geschichte</span>) und wird deshalb auf einer eigenen Website präsentiert.",
+      faq_q3: "Sind die Inhalte schon final?", faq_a3: "Nein – alle Projekte sind noch in Arbeit. Inhalte und Design können sich jederzeit ändern.",
+      faq_q4: "Wie werden die Seiten betrieben?", faq_a4: "Unsere Websites laufen über <a class='link' href='https://www.netlify.com/' target='_blank' rel='noopener'>Netlify</a>, die Domain wird über <a class='link' href='https://www.squarespace.com/' target='_blank' rel='noopener'>Squarespace</a> verwaltet.",
+      faq_q5: "Kann ich Feedback geben oder Ideen einreichen?", faq_a5: "Ja, gerne per E-Mail an <a class='link' href='mailto:oberstufesite@gmail.com'>oberstufesite@gmail.com</a> oder über unser <a class='link' href='https://docs.google.com/forms/d/e/1FAIpQLSc7hitAkvgDHXnOKgRpvolibMhm3iHeag_V-Azm4Mz8zef63w/viewform?usp=dialog' target='_blank' rel='noopener'>Feedback-Formular</a>.",
+      add_title: "Wie kann ich selbst ein Projekt hinzufügen?", add_sub: "Es gibt verschiedene Möglichkeiten, dein Projekt bei uns einzubringen.",
+      add_card1_h: "Ansprechen in der Schule", add_card1_p: "Sprich uns einfach in der Schule an – wir schauen gemeinsam, wie wir dein Projekt einbinden können.",
+      add_card2_h: "E-Mail schreiben", add_card2_p: "Schick uns eine E-Mail mit deiner Idee – wir gucken dann, was wir tun können.",
+      add_card3_h: "Feedback-Formular", add_card3_p: "Nutze unser Formular, wenn du uns Details schicken möchtest.",
+      add_why_h: "Warum mitmachen?",
+      add_why_p: "Du machst dein Projekt für jeden frei zugänglich – immer und jederzeit. Dabei sammelst du wertvolle Erfahrungen in Webentwicklung und Präsentation und kannst die Website auch nutzen, um eigene Projekte vorzustellen. Gleichzeitig trägst du dazu bei, unsere Sammlung stetig zu erweitern.",
+      back_home: "← Zurück zur Startseite",
+      cta_add: "Projekt hinzufügen",
+      pp_title: "Willkommen bei oberstufe.site PowerPoints",
+      pp_sub: "Sammlung von Präsentationen, die wir im Unterricht erstellt haben.",
+      pp_nav_physik: "Physik", pp_nav_phil: "Philosophie", pp_nav_geo: "Erdkunde", pp_nav_hist: "Geschichte", pp_nav_sowi: "SoWi",
+      pp_nav_math: "Mathe", pp_nav_de: "Deutsch", pp_nav_sp: "Sport", pp_nav_ch: "Chemie", pp_nav_inf: "Informatik",
+      sec_physik: "Präsentationen aus dem Physikunterricht",
+      sec_phil: "Philosophie-Themen und Denkmodelle",
+      sec_geo: "Geographie & Umwelt",
+      sec_hist: "Historische Themen",
+      sec_sowi: "Sozialwissenschaften & Politik",
+      sec_math: "Mathematik – Material folgt",
+      sec_de: "Deutsch – Material folgt",
+      sec_sp: "Sport – Material folgt",
+      sec_ch: "Chemie – Material folgt",
+      sec_inf: "Informatik – Material folgt",
+      coming_title: "Coming soon", coming_desc: "Material folgt in Kürze.", download: "Download"
+    },
+    en: {
+      nav_home: "Home", nav_pp: "PowerPoints", nav_vid: "Videos",
+      set_theme: "Theme", set_lang: "Language", set_density: "Density", set_qr: "QR in footer",
+      density_comfort: "Comfort", density_compact: "Compact",
+      open_changelog: "Changelog", open_contact: "Contact",
+      share_site: "Share this website!", feedback: "Feedback",
+      hero_home_title: "Welcome to oberstufe.site",
+      hero_home_sub: "The central start page for our projects",
+      grid_title: "Our websites",
+      sort_label: "Sort:", sort_std: "Default", sort_az: "A–Z", sort_za: "Z–A", sort_rnd: "Random",
+      more_coming: "More coming soon",
+      about_title: "About this project",
+      about_1: "This project was created as part of our schoolwork. We experiment with AI, build presentations, and publish websites here on oberstufe.site.",
+      about_2: "Our pages are hosted with <a class=\"link\" href=\"https://www.netlify.com/\" target=\"_blank\" rel=\"noopener\">Netlify</a>, while the domain is managed via <a class=\"link\" href=\"https://www.squarespace.com/\" target=\"_blank\" rel=\"noopener\">Squarespace</a>.",
+      about_3: "Please note: The websites are not yet finished. Content and design may change at any time.",
+      about_4: "If you have questions or ideas, contact us at <a class=\"mail\" href=\"mailto:oberstufesite@gmail.com\">oberstufesite@gmail.com</a>.",
+      improv_title: "Planned improvements",
+      faq_title: "FAQ",
+      faq_q1: "What is oberstufe.site?", faq_a1: "oberstufe.site is our central start page that collects all student projects.",
+      faq_q2: "Why multiple websites?", faq_a2: "Each project has its own topic (e.g., <span class='kw-philosophie'>philosophy</span>, <span class='kw-kunst'>art</span>, <span class='kw-geschichte'>history</span>) and is presented on its own website.",
+      faq_q3: "Are the contents final?", faq_a3: "No — all projects are still in progress. Content and design can change anytime.",
+      faq_q4: "How are the pages operated?", faq_a4: "Our websites run on <a class='link' href='https://www.netlify.com/' target='_blank' rel='noopener'>Netlify</a>, the domain is managed via <a class='link' href='https://www.squarespace.com/' target='_blank' rel='noopener'>Squarespace</a>.",
+      faq_q5: "How can I give feedback?", faq_a5: "By email to <a class='link' href='mailto:oberstufesite@gmail.com'>oberstufesite@gmail.com</a> or using our <a class='link' href='https://docs.google.com/forms/d/e/1FAIpQLSc7hitAkvgDHXnOKgRpvolibMhm3iHeag_V-Azm4Mz8zef63w/viewform?usp=dialog' target='_blank' rel='noopener'>feedback form</a>.",
+      add_title: "How can I add my own project?", add_sub: "There are different ways to contribute your project.",
+      add_card1_h: "Talk to us at school", add_card1_p: "Come talk to us at school — we will see how to include your project.",
+      add_card2_h: "Send an email", add_card2_p: "Email us your idea — and we’ll see what we can do.",
+      add_card3_h: "Feedback form", add_card3_p: "Use our form if you want to send us details.",
+      add_why_h: "Why participate?",
+      add_why_p: "You make your project freely accessible — always and at any time. You gain valuable experience in web development and presenting, can use the website to showcase your own projects, and help grow the collection.",
+      back_home: "← Back to homepage",
+      cta_add: "Add project",
+      pp_title: "Welcome to oberstufe.site PowerPoints",
+      pp_sub: "Collection of presentations we created in class.",
+      pp_nav_physik: "Physics", pp_nav_phil: "Philosophy", pp_nav_geo: "Geography", pp_nav_hist: "History", pp_nav_sowi: "Social Studies",
+      pp_nav_math: "Math", pp_nav_de: "German", pp_nav_sp: "PE", pp_nav_ch: "Chemistry", pp_nav_inf: "Computer Science",
+      sec_physik: "Presentations from physics class",
+      sec_phil: "Philosophy topics and models",
+      sec_geo: "Geography & environment",
+      sec_hist: "Historical topics",
+      sec_sowi: "Social sciences & politics",
+      sec_math: "Mathematics — coming soon",
+      sec_de: "German — coming soon",
+      sec_sp: "Physical education — coming soon",
+      sec_ch: "Chemistry — coming soon",
+      sec_inf: "Computer science — coming soon",
+      coming_title: "Coming soon", coming_desc: "Content coming shortly.", download: "Download"
+    }
+  };
+  
+function applyI18N(lang){
+  try{ localStorage.setItem('lang', lang); }catch(e){}
+  const dictDe = (window.I18N && I18N.de) || {};
+  const dictLang = (window.I18N && I18N[lang]) || {};
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const val = (dictLang[key] !== undefined) ? dictLang[key] : (dictDe[key] !== undefined ? dictDe[key] : el.innerHTML);
+    el.innerHTML = val;
+  });
+  const si = document.getElementById('searchInput');
+  if(si){ si.setAttribute('placeholder', lang==='en' ? 'Search… (topics or tags)' : 'Suche nach Themen oder Tags … (z. B. Kunst, Philosophie, Geschichte)'); }
+}
+);
+    const si = document.getElementById('searchInput');
+    if(si){ si.setAttribute('placeholder', lang==='en' ? 'Search topics or tags… (e.g., art, philosophy, history)' : 'Suche nach Themen oder Tags … (z. B. Kunst, Philosophie, Geschichte)'); }
+  }
+</script>
+
+
+
+
+
+<script>
+/* v2.15 header js */
+document.addEventListener('DOMContentLoaded', function(){
+  const menuBtn=document.getElementById('menuBtn');
+  const menuList=document.getElementById('menuList');
+  function closeMenu(){ if(menuList) menuList.classList.remove('open'); if(menuBtn){ menuBtn.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); } }
+  function openMenu(){ if(menuList) menuList.classList.add('open'); if(menuBtn){ menuBtn.classList.add('open'); menuBtn.setAttribute('aria-expanded','true'); } }
+  menuBtn && menuBtn.addEventListener('click', (e)=>{ e.stopPropagation(); if(menuList && menuList.classList.contains('open')){ closeMenu(); } else { openMenu(); } });
+  document.addEventListener('click', (e)=>{ if(menuList && !menuList.contains(e.target) && e.target!==menuBtn){ closeMenu(); } });
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ closeMenu(); } });
+
+  // Hook dropdown items to open overlays
+  const overlay=document.getElementById('overlayGlobal');
+  const mod=(id)=>document.getElementById(id);
+  const openModal=(m)=>{ if(overlay&&m){ overlay.style.display='block'; m.style.display='block'; } closeMenu(); };
+  [['menuOpenSettings','modalSettings'],['menuOpenChangelog','modalChangelog'],['menuOpenLegend','modalLegend'],['menuOpenContact','modalContact']]
+    .forEach(([a,b])=>{ const el=document.getElementById(a); const mm=mod(b); el&&el.addEventListener('click',()=>openModal(mm)); });
+
+  ['closeSettings','closeChangelog','closeLegend','closeContact'].forEach(id=>{ const btn=document.getElementById(id); btn&&btn.addEventListener('click', ()=>{ const m=document.getElementById(id.replace('close','modal')); if(m) m.style.display='none'; if(overlay) overlay.style.display='none'; }); });
+  overlay && overlay.addEventListener('click', ()=>{ ['modalSettings','modalChangelog','modalLegend','modalContact'].forEach(i=>{ const m=document.getElementById(i); if(m) m.style.display='none'; }); overlay.style.display='none'; });
+});
+</script>
+
+<script>
+/* v2.16 scroll js */
+(function(){
+  })();
+</script>
+
+<script>
+/* v2.17 theme js */
+(function(){
+  const themeLight=document.getElementById('themeLight');
+  const themeDark=document.getElementById('themeDark');
+  function setTheme(next){
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('theme', next);}catch(e){}
+    if(themeLight) themeLight.classList.toggle('active', next==='light');
+    if(themeDark) themeDark.classList.toggle('active', next==='dark');
+  }
+  const saved=localStorage.getItem('theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light');
+  setTheme(saved);
+  themeLight && themeLight.addEventListener('click', ()=> setTheme('light'));
+  themeDark && themeDark.addEventListener('click', ()=> setTheme('dark'));
+})();
+</script>
+
+
+
+
+<script>
+/* v2.26 unified scroll visibility */
+(function(){
+  const toTopBtn = document.getElementById('toTopBtn');
+  const feedbackBtn = document.getElementById('feedbackBtn');
+  function sync(){
+    const y = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    const show = y > 160;
+    if(toTopBtn) toTopBtn.classList.toggle('show', show);
+    if(feedbackBtn) feedbackBtn.classList.toggle('show', show);
+  }
+  window.addEventListener('scroll', sync, {passive:true});
+  sync();
+  if(toTopBtn){
+    toTopBtn.addEventListener('click', function(){
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+})();
+</script>
+
+
+<script>
+/* v2.37 – Language listeners harden */
+(function(){
+  function safeApply(lang){
+    if (typeof applyI18N === 'function') { applyI18N(lang); }
+  }
+  var langDeBtn = document.getElementById('langDe');
+  var langEnBtn = document.getElementById('langEn');
+  if(langDeBtn){ langDeBtn.onclick = function(){ safeApply('de'); }; }
+  if(langEnBtn){ langEnBtn.onclick = function(){ safeApply('en'); }; }
+})();
+</script>
+
+
+<script>
+// v2.41a helpers
+(function(){
+  // Title anthracite on index & 200
+  try{
+    var h1 = document.querySelector('h1');
+    if(h1 && /Willkommen auf oberstufe\.site/i.test(h1.textContent)){
+      h1.classList.add('site-title','title-anthrazit');
+    }
+  }catch(e){}
+
+  // Mark feedback card to color links blue
+  try{
+    document.querySelectorAll('.card, section, div').forEach(function(el){
+      if(/Kann ich Feedback geben oder Ideen einreichen\?/i.test(el.textContent)){
+        // add class to closest card-like container
+        var target = el.closest('.card') || el;
+        target.classList.add('feedback-card');
+      }
+    });
+  }catch(e){}
+})();
+</script>
+
+
+<!-- Netlify Identity (login status only) -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+(function(){
+  function setAdminMode(user){
+    if(user){ document.documentElement.classList.add('admin-yes'); }
+    else{ document.documentElement.classList.remove('admin-yes'); }
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    if(window.netlifyIdentity){
+      window.netlifyIdentity.on('init', setAdminMode);
+      window.netlifyIdentity.on('login', function(user){ setAdminMode(user); });
+      window.netlifyIdentity.on('logout', function(){ setAdminMode(null); });
+      window.netlifyIdentity.init();
+    }
+  });
+})();
+</script>
+<style>
+  .admin-only{ display:none }
+  .admin-yes .admin-only{ display:initial }
+</style>
+
+<script>
+// v2.70 Menu + Modals + Theme
+(function(){
+  const btn = document.getElementById('menuBtn');
+  const list = document.getElementById('menuList');
+  const overlay = document.getElementById('overlayGlobal');
+
+  function openMenu(){ if(list){ list.classList.add('open'); } if(btn){ btn.classList.add('open'); btn.setAttribute('aria-expanded','true'); } }
+  function closeMenu(){ if(list){ list.classList.remove('open'); } if(btn){ btn.classList.remove('open'); btn.setAttribute('aria-expanded','false'); } }
+
+  btn && btn.addEventListener('click', (e)=>{ e.stopPropagation(); list && (list.classList.contains('open')?closeMenu():openMenu()); });
+
+  document.addEventListener('click', (e)=>{
+    if(list && !list.contains(e.target) && !btn.contains(e.target)) closeMenu();
+  });
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ closeMenu(); closeAllModals(); }});
+
+  // Modals
+  const modals = Array.from(document.querySelectorAll('.modal'));
+  function closeAllModals(){ modals.forEach(m=>m.classList.remove('open')); overlay && overlay.classList.remove('show'); }
+  function openModal(id){ closeMenu(); const m=document.getElementById(id); if(m){ m.classList.add('open'); overlay && overlay.classList.add('show'); } }
+
+  document.querySelectorAll('#menuList [data-modal]').forEach(el=>{
+    el.addEventListener('click', ()=> openModal(el.getAttribute('data-modal')));
+  });
+  overlay && overlay.addEventListener('click', closeAllModals);
+  document.querySelectorAll('[data-close]').forEach(x=> x.addEventListener('click', closeAllModals));
+
+  // Theme
+  function setTheme(next){
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('theme', next);}catch(e){}
+    const tL=document.getElementById('themeLight'); const tD=document.getElementById('themeDark');
+    tL && tL.classList.toggle('active', next==='light');
+    tD && tD.classList.toggle('active', next==='dark');
+  }
+  const saved = (function(){
+    try{ return localStorage.getItem('theme'); }catch(e){ return null; }
+  })() || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light');
+  setTheme(saved);
+
+  const tL=document.getElementById('themeLight'); const tD=document.getElementById('themeDark');
+  tL && tL.addEventListener('click', ()=> setTheme('light'));
+  tD && tD.addEventListener('click', ()=> setTheme('dark'));
+})();
+</script>
+</body>
+</html>
